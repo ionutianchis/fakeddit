@@ -1,0 +1,47 @@
+.home-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 100px;
+}
+
+.middle-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.about-container {
+    position: sticky;
+    margin-left: 25px;
+    width: 262px;
+    height: 310px;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 55px;
+    border: 1px solid rgba(126, 126, 126, 0.4);
+    border-radius: 4px;
+    background-color: #1a1a1b;
+    font-size: 15px;
+}
+
+.about-container h3, p {
+    margin-left: 10px;
+}
+
+.git-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.git-button {
+    background-image: url('../images/github.png');
+    background-position: center;
+    background-size: cover;
+    background-color: transparent;
+    cursor: pointer;
+    border: none;
+    width: 30px;
+    height: 30px;
+}

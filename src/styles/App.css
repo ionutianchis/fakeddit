@@ -1,0 +1,30 @@
+@font-face {
+    font-family: logoFont;
+    src: url('../fonts/logo-font.otf');
+}
+
+@font-face {
+    font-family: verdana-bold;
+    src: url('../fonts/verdana-bold.ttf');
+}
+
+@font-face {
+    font-family: verdana;
+    src: url('../fonts/verdana.ttf');
+}
+
+html {
+    background-color: #030303;
+    color: #fff;
+    font-family: verdana;
+}
+
+body {
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
