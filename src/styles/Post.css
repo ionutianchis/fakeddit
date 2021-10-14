@@ -1,8 +1,109 @@
 .post-container {
+    position: relative;
     width: 724px;
-    height: 180px;
+    height: auto;
+    min-height: 170px;
     border: 1px solid rgba(126, 126, 126, 0.4);
     border-radius: 4px;
     background-color: #1a1a1b;
     margin-bottom: 20px;
+    cursor: pointer;
+    padding: 6px;
+}
+
+.post-container:hover {
+    border: 1px solid rgb(170, 170, 170);
+}
+
+.arrow-buttons-div {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 25px;
+    height: 65px;
+    margin-top: 5px;
+    margin-left: 3px;
+}
+
+.arrow-buttons-div-container {
+    position: absolute;
+    background-color: #151516;
+    height: 100%;
+    width: 40px;
+    left: 0;
+    top: 0;
+}
+
+.arrow-button {
+    width: 20px;
+    height: 20px;
+    background-position: center;
+    background-size: cover;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.arrow-button-up {
+    background-image: url('../images/up.png');
+}
+
+.arrow-button-up:hover {
+    background-image: url('../images/up-activated.png');
+    background-color:rgba(126, 126, 126, 0.2);
+}
+
+.arrow-button-down {
+    background-image: url('../images/down.png');
+}
+
+.arrow-button-down:hover {
+    background-image: url('../images/down-activated.png');
+    background-color:rgba(126, 126, 126, 0.2);
+}
+
+.post-footer-container {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 70%;
+    margin-bottom: 3px;
+}
+
+.post-footer-container img {
+    width: 25px;
+    height: 25px;
+}
+
+.bottom-icons-div {
+    height: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 10px;
+    margin-left: 15px;
+    padding: 5px;
+    color: #75797c;
+}
+
+.bottom-icons-div:nth-of-type(2) img {
+    width: 23px;
+    height: 23px;
+}
+
+.bottom-icons-div:nth-of-type(3) img {
+    width: 23px;
+    height: 23px;
+}
+
+.bottom-icons-div:hover {
+    background-color:rgba(126, 126, 126, 0.2);
+
+}
+
+.bottom-icons-div:nth-of-type(1) {
+    margin-left: -150px;
 }
