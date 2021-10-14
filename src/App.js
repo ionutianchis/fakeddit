@@ -11,7 +11,9 @@ const App = () => {
       
       <BrowserRouter>
         <Switch>
-          <Route exact path='/fakeddit/' />
+          <Route exact path='/fakeddit/' component={Home}/>
+          <Route exact path='/fakeddit/Best' component={Home}/>
+          <Route exact path='/fakeddit/New' component={Home}/>
         </Switch>
       
       </BrowserRouter>

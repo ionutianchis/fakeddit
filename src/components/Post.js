@@ -20,10 +20,7 @@ const Post = () => {
 
             <div className='post-footer-container'>
 				<div className='bottom-icons-div'>
-					<img
-						src={require('../images/comments.webp').default}
-						alt=''
-					/>
+					<img src={require('../images/comments.webp').default} alt=''/>
 					<p>Comments</p>
 				</div>
 
