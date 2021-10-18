@@ -1,24 +1,31 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import '../styles/Category.css'
 
 const Category = () => {
 
-    return (
+	return (
 		<div className='category-chooser'>
-			<div className='button-div'>
-				<img src={require('../images/rocket.png').default} alt='' />
-				<p>Best</p>
-			</div>
+				<Link to='/fakeddit/best/' className='styled-link'>
+					<div className='button-div'>
+						<img src={require('../images/rocket.png').default} alt='' />
+						<p>Best</p>
+					</div>
+				</Link>
 
-			<div className='button-div'>
-				<img src={require('../images/hot.png').default} alt='' />
-				<p>Hot</p>
-			</div>
+				<Link to='/fakeddit/' className='styled-link'>
+					<div className='button-div'>
+						<img src={require('../images/hot.png').default} alt='' />
+						<p>Hot</p>
+					</div>
+				</Link>
 
-			<div className='button-div'>
-				<img src={require('../images/new.png').default} alt='' />
-				<p>New</p>
-			</div>
+				<Link to='/fakeddit/new/' className='styled-link'>
+					<div className='button-div'>
+						<img src={require('../images/new.png').default} alt='' />
+						<p>New</p>
+					</div>
+				</Link>
 		</div>
 	)
 }

@@ -70,12 +70,16 @@ nav {
     outline: none;
 }
 
+.nav-buttons-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 .nav-buttons {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-    margin-right: 40px;
     width: 330px;
 }
 
@@ -88,13 +92,14 @@ nav {
     color: white;
     background-color: #1a1a1b;
     cursor: pointer;
+    margin-right: 10px;
 }
 
 .nav-log-in:hover {
     background-color: rgb(44, 44, 44);
 }
 
-.nav-sign-in {
+.nav-sign-up {
     font-family: verdana-bold;
     height: 32px;
     width: 130px;
@@ -104,7 +109,7 @@ nav {
     cursor: pointer;
 }
 
-.nav-sign-in:hover {
+.nav-sign-up:hover {
     background-color: rgb(182, 182, 182);
 }
 
@@ -116,5 +121,6 @@ nav {
     background-position: center;
     background-size: cover;
     background-color: transparent;
-    cursor: pointer;  
+    cursor: pointer;
+    margin-right: 50px;
 }

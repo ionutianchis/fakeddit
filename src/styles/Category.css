@@ -10,6 +10,10 @@
 	align-items: center;
 }
 
+.styled-link {
+	text-decoration: none;
+}
+
 .button-div {
 	margin-left: 6px;
 	display: flex;
