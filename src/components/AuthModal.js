@@ -84,7 +84,7 @@ const AuthModal = ({
 		const users = await getUsers()
 		users.forEach((user) => {
 			if (
-				user.data().name === logInCredentials.userName &&
+				user.data().name.toLowerCase() === logInCredentials.userName.toLowerCase() &&
 				user.data().pass === logInCredentials.userPass
 			) {
 				setIsLoggedIn(true)
@@ -95,7 +95,7 @@ const AuthModal = ({
 			}
 		})
 	}
-
+	
 	return (
 		<Modal
 			isOpen={modalOpen}

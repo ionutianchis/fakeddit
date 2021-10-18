@@ -1,8 +1,7 @@
 import React from 'react'
 import '../styles/PostPreview.css'
-
-const Post = () => {
-    
+const PostPreview = ({title, text, author, date, upvotes}) => {
+	
     return (
 		<div className='post-container'>
 			
@@ -13,7 +12,7 @@ const Post = () => {
 						className='arrow-button arrow-button-up'
 					/>
 
-					<span>0</span>
+					<span>{upvotes}</span>
 					
 					<button
 						type='button'
@@ -23,14 +22,14 @@ const Post = () => {
 			</div>
 
 			<div className='post-top-container'>
-				<p>Posted by u/test</p>
-				<p>2 hours ago</p>
+				<p>Posted by u/{author}</p>
+				<p>{date} ago</p>
 
 			</div>
 
 			<div className='post-middle-container'>
-				<h3>This test</h3>
-				<p>Ff</p>
+				<h3>{title}</h3>
+				<p>{text}</p>
 			</div>
 
             <div className='post-footer-container'>
@@ -55,4 +54,4 @@ const Post = () => {
 	)
 }
 
-export default Post
+export default PostPreview

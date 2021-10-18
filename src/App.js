@@ -6,32 +6,36 @@ import Best from './components/Best'
 import Submit from './components/Submit'
 import { getPost } from './components/Firebase'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-
+import {formatDistance} from 'date-fns'
 const App = () => {
   
 	const [isLoggedIn, setIsLoggedIn] = useState(false)
 	
 	const [storedPosts, setStoredPosts] = useState([])
 
+	const today = new Date()
+
 	const getDbPost = async () => {
 		const post = await getPost()
 		post.forEach((doc) => {
-			setStoredPosts(prevState => ([...prevState,
+			setStoredPosts((prevState) => [
+				...prevState,
 				{
 					title: doc.id,
-					text: doc.data().text
-				}
-			]))
+					text: doc.data().text,
+					author: doc.data().author,
+					upvotes: doc.data().upvotes,
+					date: formatDistance(doc.data().date.toDate(), today)
+				},
+			])
 		})
 	}
 
 	useEffect(() => {
 		getDbPost()
-
 	}, [])
 
 	console.log(storedPosts)
-
 	return (
 		<div className='container'>
 			<BrowserRouter basename='/'>
