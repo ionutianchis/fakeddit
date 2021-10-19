@@ -54,8 +54,6 @@ const PostPreview = ({
 		setDownvoteDisable(!isLoggedIn)			// change vote ability after login
 	}, [isLoggedIn])
 
-	console.log(!isLoggedIn)
-
 	return (
 		<div className='post-container'>
 			<div className='arrow-buttons-div-container'>

@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app'
+import { initializeApp} from 'firebase/app'
 import {
 	getFirestore,
 	collection,
@@ -6,6 +6,11 @@ import {
 	getDocs,
 	setDoc,
 } from 'firebase/firestore'
+import {
+	getAuth,
+	createUserWithEmailAndPassword,
+	signInWithEmailAndPassword,
+} from 'firebase/auth'
 
 const firebaseApp = initializeApp({
 	apiKey: 'AIzaSyAHL_OMClzsJ1Y-2qiyGsAegwwQE2JS8tw',
@@ -18,21 +23,25 @@ const firebaseApp = initializeApp({
 
 const db = getFirestore()
 
-export const storeUser = async (userName, userMail, userPass) => {
-	try {
-		await setDoc(doc(db, 'credentials', userName), { 
-			name: userName,
-			email: userMail,
-			pass: userPass,
-		})
-	} catch (error) {
-		console.error('Error adding document', error)
-	}
-}
+const auth = getAuth()
 
-export const getUsers = async () => {
-	const querySnapshot = await getDocs(collection(db, 'credentials'))
-	return querySnapshot
+export const addUser = (email, password) => {
+	createUserWithEmailAndPassword(auth, email, password)
+ 		.then((userCredential) => {
+				const user = userCredential.user
+				console.log(user)
+		})
+		.catch((error) => {
+		})
+
+}
+export const loginUser = async (email, password) => {
+	try {
+		await signInWithEmailAndPassword(auth, email, password)
+		return true
+	} catch (error) {
+		return error.message
+	}
 }
 
 export const getPost = async () => {

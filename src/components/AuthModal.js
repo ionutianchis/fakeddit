@@ -1,7 +1,7 @@
-import React, {useState}from "react"
+import React, { useState } from 'react'
 import Modal from 'react-modal'
 import '../styles/AuthModal.css'
-import storeUser, { getUsers } from './Firebase'
+import { addUser, loginUser } from './Firebase'
 Modal.setAppElement('#root')
 
 const AuthModal = ({
@@ -19,12 +19,12 @@ const AuthModal = ({
 	})
 
 	const [logInCredentials, setLogInCredentials] = useState({
-		userName: '',
+		userEmail: '',
 		userPass: '',
 	})
 
 	const [error, setError] = useState('')
-	const [loginError, setLoginError] = useState(false)
+	const [loginError, setLoginError] = useState('')
 
 	const [formSubmitted, setFormSubmitted] = useState(false)
 
@@ -48,21 +48,17 @@ const AuthModal = ({
 			signUpCredentials.email.length < 1 ||
 			signUpCredentials.pass.length < 1
 		) {
-			setError('Field/s cannot be empty')
+			setError('Field/s cannot be empty!')
 		} else if (
 			!signUpCredentials.email.includes('@') ||
 			!signUpCredentials.email.includes('.com')
 		) {
-			setError('Email is incorrect')
+			setError('Email is incorrect.')
 		} else if (signUpCredentials.pass.length < 4) {
-			setError('Password is too short, minimum 4 characters')
+			setError('Password is too short, minimum 4 characters.')
 		} else {
 			setFormSubmitted(true)
-			storeUser(
-				signUpCredentials.name,
-				signUpCredentials.email,
-				signUpCredentials.pass
-			)
+			addUser(signUpCredentials.email, signUpCredentials.pass)
 			setSignInTime(true)
 		}
 	}
@@ -80,22 +76,33 @@ const AuthModal = ({
 		clearForm()
 	}
 
-	const handleLogIn = async () => {
-		const users = await getUsers()
-		users.forEach((user) => {
-			if (
-				user.data().name.toLowerCase() === logInCredentials.userName.toLowerCase() &&
-				user.data().pass === logInCredentials.userPass
-			) {
-				setIsLoggedIn(true)
-				setModalOpen(false)
-			} else {
-				setIsLoggedIn(false)
-				setLoginError('Incorrect name or password')
-			}
-		})
+	const loginValidation = () => {
+		if (
+			logInCredentials.userEmail.length < 1 ||
+			logInCredentials.userPass < 1
+		) {
+			setLoginError('Field/s cannot be empty!')
+		}
 	}
-	
+
+	const handleLogIn = async () => {
+		const tryLogin = await loginUser(
+			logInCredentials.userEmail,
+			logInCredentials.userPass
+		)
+		if (tryLogin === true) {
+			setModalOpen(!modalOpen)
+			setIsLoggedIn(true)
+		} else if (tryLogin === 'Firebase: Error (auth/invalid-email).') {
+			setLoginError('Invalid email.')
+		} else if (tryLogin === 'Firebase: Error (auth/user-not-found).') {
+			setLoginError('Email not found.')
+		} else if (tryLogin === 'Firebase: Error (auth/wrong-password).') {
+			setLoginError('Wrong password.')
+		}
+		loginValidation()
+	}
+
 	return (
 		<Modal
 			isOpen={modalOpen}
@@ -115,9 +122,9 @@ const AuthModal = ({
 					<form className='auth-form login-form'>
 						<input
 							type='text'
-							placeholder='USERNAME'
-							name='userName'
-							value={logInCredentials.name}
+							placeholder='EMAIL'
+							name='userEmail'
+							value={logInCredentials.userEmail}
 							onChange={(e) => setLogIn(e, e.target.name)}
 						/>
 
@@ -125,15 +132,16 @@ const AuthModal = ({
 							type='password'
 							placeholder='PASSWORD'
 							name='userPass'
-							value={logInCredentials.pass}
+							value={logInCredentials.userPass}
 							onChange={(e) => setLogIn(e, e.target.name)}
 						/>
 						{!isLoggedIn && (
 							<p
 								style={{
 									color: '#ea0027',
-									marginLeft: -85,
+									marginLeft: -115,
 									marginBottom: -10,
+									marginTop: 10,
 									fontSize: 12,
 								}}>
 								{loginError}
@@ -161,7 +169,7 @@ const AuthModal = ({
 							type='text'
 							name='name'
 							value={signUpCredentials.name}
-							placeholder='USERNAME'
+							placeholder='NAME'
 							onChange={(e) => setSignUp(e, e.target.name)}
 						/>
 						<input
@@ -183,7 +191,8 @@ const AuthModal = ({
 							<p
 								style={{
 									color: '#ea0027',
-									marginLeft: -125,
+									marginLeft: -120,
+									marginTop: 10,
 									marginBottom: -10,
 									fontSize: 12,
 								}}>

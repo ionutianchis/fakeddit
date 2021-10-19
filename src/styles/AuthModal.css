@@ -58,16 +58,35 @@
     align-items: baseline;
 }
 
-.text-container p:nth-of-type(2) {
+.text-container p:nth-of-type(1) {
     margin-left: 0px;
     font-size: 12px;
     margin-top: 0;
 }
 
+.text-container p:nth-of-type(2) {
+    margin-left: 0px;
+    font-size: 12px;
+    margin-top: 0;
+}
+ 
 .text-container form {
     display: flex;
     flex-direction: column;
-    margin-top: 200px;
+}
+
+.login-form {
+    margin-top: 290px;
+}
+
+.sign-up-form {
+    margin-top: 230px;
+}
+
+.login-form p:nth-of-type(2) {
+    margin-left: 0px;
+    font-size: 12px;
+    margin-top: 0;
 }
 
 .auth-form input {
