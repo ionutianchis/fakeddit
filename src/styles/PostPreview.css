@@ -58,8 +58,18 @@
     background-color:rgba(126, 126, 126, 0.2);
 }
 
+.arrow-button-up-active { 
+    background-image: url('../images/up-activated.png');
+    background-color:rgba(126, 126, 126, 0.2);
+}
+
 .arrow-button-down {
     background-image: url('../images/down.png');
+}
+
+.arrow-button-down-active { 
+    background-image: url('../images/down-activated.png');
+    background-color:rgba(126, 126, 126, 0.2);
 }
 
 .arrow-button-down:hover {

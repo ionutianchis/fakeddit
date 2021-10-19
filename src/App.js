@@ -33,9 +33,9 @@ const App = () => {
 
 	useEffect(() => {
 		getDbPost()
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
-
-	console.log(storedPosts)
+	
 	return (
 		<div className='container'>
 			<BrowserRouter basename='/'>
@@ -45,7 +45,7 @@ const App = () => {
 					<Route
 						exact
 						path='/fakeddit/'
-						render={() => <Home isLoggedIn={isLoggedIn} storedPosts={storedPosts}/>}
+						render={() => <Home isLoggedIn={isLoggedIn} storedPosts={storedPosts} setStoredPosts={setStoredPosts}/>}
 				  	/>
 					<Route
 						exact

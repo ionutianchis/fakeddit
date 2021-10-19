@@ -20,7 +20,7 @@ const db = getFirestore()
 
 export const storeUser = async (userName, userMail, userPass) => {
 	try {
-		await setDoc(doc(db, 'credentials', userName), {
+		await setDoc(doc(db, 'credentials', userName), { 
 			name: userName,
 			email: userMail,
 			pass: userPass,
@@ -39,5 +39,35 @@ export const getPost = async () => {
 	const querySnapshot = await getDocs(collection(db, 'posts'))
 	return querySnapshot
 }
+
+
+export const incrementDbVote = async (e) => {
+	const post = await getPost()
+	post.forEach((currDoc) => {
+		if (currDoc.id === e.target.name) {
+			const postRef = doc(db, 'posts', currDoc.id)
+ 			setDoc(
+				postRef,
+	 	 			{ upvotes: currDoc.data().upvotes+1 },
+ 	 				{ merge: true }
+			) 
+		}
+	}) 
+}
+
+export const decrementDbVote = async (e) => {
+	const post = await getPost()
+	post.forEach((currDoc) => {
+		if (currDoc.id === e.target.name) {
+			const postRef = doc(db, 'posts', currDoc.id)
+ 			setDoc(
+				postRef,
+	 	 			{ upvotes: currDoc.data().upvotes-1 },
+ 	 				{ merge: true }
+			) 
+		}
+	}) 
+}
+
 
 export default firebaseApp
