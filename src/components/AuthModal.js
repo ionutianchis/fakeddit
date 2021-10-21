@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import Modal from 'react-modal'
 import '../styles/AuthModal.css'
-import { addUser, loginUser } from './Firebase'
+import { addUser, loginUser, getUserName } from './Firebase'
+
 Modal.setAppElement('#root')
 
 const AuthModal = ({
@@ -11,6 +12,7 @@ const AuthModal = ({
 	setSignInTime,
 	isLoggedIn,
 	setIsLoggedIn,
+	setLoggedInUser
 }) => {
 	const [signUpCredentials, setSignUpCredentials] = useState({
 		name: '',
@@ -24,9 +26,11 @@ const AuthModal = ({
 	})
 
 	const [error, setError] = useState('')
+
 	const [loginError, setLoginError] = useState('')
 
 	const [formSubmitted, setFormSubmitted] = useState(false)
+
 
 	const setSignUp = (e, field) => {
 		setSignUpCredentials((prevState) => ({
@@ -54,11 +58,15 @@ const AuthModal = ({
 			!signUpCredentials.email.includes('.com')
 		) {
 			setError('Email is incorrect.')
-		} else if (signUpCredentials.pass.length < 4) {
-			setError('Password is too short, minimum 4 characters.')
+		} else if (signUpCredentials.pass.length < 6) {
+			setError('Password is too short, minimum 6 characters.')
 		} else {
 			setFormSubmitted(true)
-			addUser(signUpCredentials.email, signUpCredentials.pass)
+			addUser(
+				signUpCredentials.email,
+				signUpCredentials.pass,
+				signUpCredentials.name
+			)
 			setSignInTime(true)
 		}
 	}
@@ -76,6 +84,15 @@ const AuthModal = ({
 		clearForm()
 	}
 
+	const getUserNameFromDb = async () => {
+		const user = await getUserName(logInCredentials.userEmail)
+		user.forEach((doc) => {
+			if (doc.data().email === logInCredentials.userEmail) {
+				setLoggedInUser(doc.data().name)
+			}
+		})
+	}
+
 	const loginValidation = () => {
 		if (
 			logInCredentials.userEmail.length < 1 ||
@@ -91,8 +108,9 @@ const AuthModal = ({
 			logInCredentials.userPass
 		)
 		if (tryLogin === true) {
-			setModalOpen(!modalOpen)
+			getUserNameFromDb()
 			setIsLoggedIn(true)
+			setModalOpen(!modalOpen)
 		} else if (tryLogin === 'Firebase: Error (auth/invalid-email).') {
 			setLoginError('Invalid email.')
 		} else if (tryLogin === 'Firebase: Error (auth/user-not-found).') {

@@ -10,6 +10,7 @@ import {
 	getAuth,
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
+	signOut
 } from 'firebase/auth'
 
 const firebaseApp = initializeApp({
@@ -25,22 +26,50 @@ const db = getFirestore()
 
 const auth = getAuth()
 
-export const addUser = (email, password) => {
-	createUserWithEmailAndPassword(auth, email, password)
- 		.then((userCredential) => {
-				const user = userCredential.user
-				console.log(user)
+const storeUserName = async (email, name) => {
+	try {
+		await setDoc(doc(db, 'users', name), {
+			email: email,
+			name: name
 		})
-		.catch((error) => {
-		})
-
+	} catch (error) {
+		
+	}
 }
+
+export const addUser = async (email, password, name) => {
+	try {
+		await createUserWithEmailAndPassword(auth, email, password)
+		storeUserName(email, name)
+	} catch (error) {
+		console.error(error)
+	}
+}
+
+export const getUserName = async (email) => {
+	const querySnapshot = await getDocs(collection(db, 'users'))
+	return querySnapshot
+}
+
 export const loginUser = async (email, password) => {
 	try {
 		await signInWithEmailAndPassword(auth, email, password)
 		return true
 	} catch (error) {
 		return error.message
+	}
+}
+
+export const storePost = async (title, text, author, upvotes, date) => {
+	try {
+		await setDoc(doc(db, 'posts', title), {
+			text: text,
+			author: author,
+			upvotes: upvotes,
+			date: date
+		})
+	} catch (error) {
+		console.error(error)
 	}
 }
 
@@ -78,5 +107,11 @@ export const decrementDbVote = async (e) => {
 	}) 
 }
 
-
+export const logOutUser = async () => {
+	try {
+		await signOut(auth)
+	} catch (error) {
+		console.error(error)
+	}
+}
 export default firebaseApp

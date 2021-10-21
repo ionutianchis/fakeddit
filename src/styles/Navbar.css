@@ -74,6 +74,7 @@ nav {
     display: flex;
     flex-direction: row;
     align-items: center;
+    position: relative;
 }
 
 .nav-buttons {
@@ -113,6 +114,13 @@ nav {
     background-color: rgb(182, 182, 182);
 }
 
+.nav-user-buttons {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-right: 50px;
+}
+
 .nav-user-icon {
     width: 28px;
     height: 28px;
@@ -122,5 +130,33 @@ nav {
     background-size: cover;
     background-color: transparent;
     cursor: pointer;
-    margin-right: 50px;
+}
+
+.dropdown-container { 
+    position: fixed;
+    width: 130px;
+    height: auto;
+    top: 60px;
+    right: 0px;
+    z-index: 500;
+    background-color: #1a1a1b;
+    border: 1px solid rgba(126, 126, 126, 0.2);
+    border-top: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.dropdown-button {
+    width: 100%;
+    padding: 25px;
+    background-color: transparent;
+    border: none;
+    color: #75797c;
+    font-weight: bold;
+}
+
+.dropdown-button:hover {
+	background-color:rgba(126, 126, 126, 0.2);
 }

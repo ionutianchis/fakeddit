@@ -6,17 +6,20 @@ import Best from './components/Best'
 import Submit from './components/Submit'
 import { getPost } from './components/Firebase'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import {formatDistance} from 'date-fns'
+import { formatDistance } from 'date-fns'
+
 const App = () => {
   
 	const [isLoggedIn, setIsLoggedIn] = useState(false)
 	
+	const [loggedInUser, setLoggedInUser] = useState('')
+
 	const [storedPosts, setStoredPosts] = useState([])
 
-	const today = new Date()
-
+	
 	const getDbPost = async () => {
 		const post = await getPost()
+		const today = new Date()
 		post.forEach((doc) => {
 			setStoredPosts((prevState) => [
 				...prevState,
@@ -35,39 +38,57 @@ const App = () => {
 		getDbPost()
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
-	
+	console.log(storedPosts)
 	return (
 		<div className='container'>
 			<BrowserRouter basename='/'>
-				<Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+				<Navbar
+					isLoggedIn={isLoggedIn}
+					setIsLoggedIn={setIsLoggedIn}
+					loggedInUser={loggedInUser}
+					setLoggedInUser={setLoggedInUser}
+				/>
 
 				<Switch>
 					<Route
 						exact
 						path='/fakeddit/'
-						render={() => <Home isLoggedIn={isLoggedIn} storedPosts={storedPosts} setStoredPosts={setStoredPosts}/>}
-				  	/>
+						render={() => (
+							<Home
+								isLoggedIn={isLoggedIn}
+								storedPosts={storedPosts}
+								setStoredPosts={setStoredPosts}
+							/>
+						)}
+					/>
 					<Route
 						exact
 						path='/fakeddit/best'
 						render={() => <Best isLoggedIn={isLoggedIn} />}
-				  	/>
-				  
+					/>
+
 					<Route
 						exact
 						path='/fakeddit/new'
+						render={() => <Home isLoggedIn={isLoggedIn} />}
+					/>
+
+					<Route
+						exact
+						path='/fakeddit/submit'
 						render={() => (
-							<Home
+							<Submit
+								loggedInUser={loggedInUser}
+								storedPosts={storedPosts}
+								setStoredPosts={setStoredPosts}
 								isLoggedIn={isLoggedIn}
 							/>
 						)}
-				  	/>
-				  
-				  <Route exact path='/fakeddit/submit' render={() => <Submit />}/>
+					/>
 				</Switch>
 			</BrowserRouter>
 		</div>
-  )
+	)
 }
 
 export default App;
