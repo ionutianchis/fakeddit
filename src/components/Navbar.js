@@ -10,6 +10,7 @@ const Navbar = ({
 	loggedInUser,
 	setLoggedInUser,
 }) => {
+
 	const history = useHistory()
 
 	const [modalOpen, setModalOpen] = useState(false)
@@ -39,6 +40,7 @@ const Navbar = ({
 		logOutUser()
 		setIsLoggedIn(!isLoggedIn)
 		setOpenDropdown(!openDropdown)
+		localStorage.setItem('loggedIn', false)
 	}
 
 	return (

@@ -110,6 +110,7 @@ const AuthModal = ({
 		if (tryLogin === true) {
 			getUserNameFromDb()
 			setIsLoggedIn(true)
+			localStorage.setItem('loggedIn', true)
 			setModalOpen(!modalOpen)
 		} else if (tryLogin === 'Firebase: Error (auth/invalid-email).') {
 			setLoginError('Invalid email.')

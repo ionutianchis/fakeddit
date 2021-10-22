@@ -17,6 +17,10 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 	const [error, setError] = useState('')
 	const [formSubmitted, setFormSubmitted] = useState(false)
 
+	const [textPost, setTextPost] = useState(false)
+	const [imgPost, setImgPost] = useState(false)
+	const [urlPost, setUrlPost] = useState(false)
+	
 	const handleChange = (e) => {
 
 		setPostContent({
@@ -120,7 +124,8 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 					)}
 
 					<div className='submit-buttons-div'>
-						<button type='button' className='cancel-submit-button'>
+						<button type='button' className='cancel-submit-button'
+						onClick={() => history.push('/fakeddit/')}>
 							CANCEL
 						</button>
 						<button

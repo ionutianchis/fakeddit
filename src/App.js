@@ -9,8 +9,9 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { formatDistance } from 'date-fns'
 
 const App = () => {
-  
-	const [isLoggedIn, setIsLoggedIn] = useState(false)
+	const loggedStatus = JSON.parse(localStorage.getItem('loggedIn'))
+
+	const [isLoggedIn, setIsLoggedIn] = useState(loggedStatus)
 	
 	const [loggedInUser, setLoggedInUser] = useState('')
 
@@ -38,7 +39,6 @@ const App = () => {
 		getDbPost()
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
-	console.log(storedPosts)
 	return (
 		<div className='container'>
 			<BrowserRouter basename='/'>
