@@ -41,6 +41,8 @@ const Navbar = ({
 		setIsLoggedIn(!isLoggedIn)
 		setOpenDropdown(!openDropdown)
 		localStorage.setItem('loggedIn', false)
+		setLoggedInUser(null)
+		localStorage.setItem('user', null)
 	}
 
 	return (
@@ -129,6 +131,7 @@ const Navbar = ({
 				setSignInTime={setSignInTime}
 				isLoggedIn={isLoggedIn}
 				setIsLoggedIn={setIsLoggedIn}
+				loggedInUser={loggedInUser}
 				setLoggedInUser={setLoggedInUser}
 			/>
 		</nav>

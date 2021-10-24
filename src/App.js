@@ -9,11 +9,14 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { formatDistance } from 'date-fns'
 
 const App = () => {
+
 	const loggedStatus = JSON.parse(localStorage.getItem('loggedIn'))
 
 	const [isLoggedIn, setIsLoggedIn] = useState(loggedStatus)
+
+	const loggedInUserName = localStorage.getItem('user')
 	
-	const [loggedInUser, setLoggedInUser] = useState('')
+	const [loggedInUser, setLoggedInUser] = useState(loggedInUserName)
 
 	const [storedPosts, setStoredPosts] = useState([])
 
@@ -22,23 +25,47 @@ const App = () => {
 		const post = await getPost()
 		const today = new Date()
 		post.forEach((doc) => {
-			setStoredPosts((prevState) => [
-				...prevState,
-				{
-					title: doc.id,
-					text: doc.data().text,
-					author: doc.data().author,
-					upvotes: doc.data().upvotes,
-					date: formatDistance(doc.data().date.toDate(), today)
-				},
-			])
+			if (doc.data().imgUrl) {
+				setStoredPosts((prevState) => [
+					...prevState,
+					{
+						title: doc.id,
+						imgUrl: doc.data().imgUrl,
+						author: doc.data().author,
+						upvotes: doc.data().upvotes,
+						date: formatDistance(doc.data().date.toDate(), today),
+					},
+				])
+			} else if (doc.data().url) {
+				setStoredPosts((prevState) => [
+					...prevState,
+					{
+						title: doc.id,
+						url: doc.data().url,
+						author: doc.data().author,
+						upvotes: doc.data().upvotes,
+						date: formatDistance(doc.data().date.toDate(), today),
+					},
+				])			
+			} else {
+				setStoredPosts((prevState) => [
+					...prevState,
+					{
+						title: doc.id,
+						text: doc.data().text,
+						author: doc.data().author,
+						upvotes: doc.data().upvotes,
+						date: formatDistance(doc.data().date.toDate(), today)
+					},
+				])
+			}
 		})
 	}
-
 	useEffect(() => {
 		getDbPost()
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
+	console.log(storedPosts)
 	return (
 		<div className='container'>
 			<BrowserRouter basename='/'>

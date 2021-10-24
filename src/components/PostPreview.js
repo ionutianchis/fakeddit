@@ -5,6 +5,8 @@ import { incrementDbVote, decrementDbVote } from './Firebase'
 const PostPreview = ({
 	title,
 	text,
+	imgUrl,
+	url,
 	author,
 	date,
 	upvotes,
@@ -13,10 +15,10 @@ const PostPreview = ({
 	index,
 	isLoggedIn,
 }) => {
-
+	
 	const [upvoteDisable, setUpvoteDisable] = useState(false)
 	const [downvoteDisable, setDownvoteDisable] = useState(false)
-
+	
 	const incrementLocalVote = () => {
 		storedPosts[index] = { ...storedPosts[index], upvotes: upvotes + 1 }
 		setStoredPosts([...storedPosts])
@@ -54,6 +56,13 @@ const PostPreview = ({
 		setDownvoteDisable(!isLoggedIn)			// change vote ability after login
 	}, [isLoggedIn])
 
+	const getFirstPart = (str) => {
+		const sliceStr = str.slice(8)
+		return sliceStr.split('/')[0]
+	}
+
+	console.log(getFirstPart('https://test.com/eetststsd'))
+
 	return (
 		<div className='post-container'>
 			<div className='arrow-buttons-div-container'>
@@ -85,6 +94,38 @@ const PostPreview = ({
 
 			<div className='post-middle-container'>
 				<h3>{title}</h3>
+
+				{imgUrl && (
+					<div className='post-img-container'>
+						<img src={imgUrl} alt='Invalid URL' />
+					</div>
+				)}
+
+				{url && (
+					<div className='url-container'>
+						<div className='anchor-tag-container'>
+							<a href={url}>{getFirstPart(url) + '/'}</a>
+							<span>...</span>
+							<img
+								src={require('../images/redirect.png').default}
+								alt=''
+							/>
+						</div>
+
+						<div className='link-image'>
+							<img src={require('../images/link-preview.png').default}
+								alt=''
+								onClick={() => window.open(url)}
+							/>
+							
+							<img
+								src={require('../images/redirect.png').default}
+								alt=''
+							/>
+						</div>
+					</div>
+				)}
+
 				<p>{text}</p>
 			</div>
 

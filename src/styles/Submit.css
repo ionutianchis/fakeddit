@@ -50,6 +50,10 @@
 
 }
 
+.selector-button-active {
+    border-bottom: 3px solid #fff
+}
+
 .submit-new-post input {
     margin-top: 20px;
     width: 90%;

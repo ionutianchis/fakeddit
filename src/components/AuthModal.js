@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Modal from 'react-modal'
 import '../styles/AuthModal.css'
 import { addUser, loginUser, getUserName } from './Firebase'
@@ -12,6 +12,7 @@ const AuthModal = ({
 	setSignInTime,
 	isLoggedIn,
 	setIsLoggedIn,
+	loggedInUser,
 	setLoggedInUser
 }) => {
 	const [signUpCredentials, setSignUpCredentials] = useState({
@@ -24,7 +25,7 @@ const AuthModal = ({
 		userEmail: '',
 		userPass: '',
 	})
-
+	
 	const [error, setError] = useState('')
 
 	const [loginError, setLoginError] = useState('')
@@ -121,6 +122,10 @@ const AuthModal = ({
 		}
 		loginValidation()
 	}
+
+	useEffect(() => {
+		localStorage.setItem('user', loggedInUser)
+	}, [loggedInUser])
 
 	return (
 		<Modal

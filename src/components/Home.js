@@ -28,6 +28,8 @@ const Home = ({ isLoggedIn, storedPosts, setStoredPosts }) => {
 							upvotes={item.upvotes}
 							date={item.date}
 							index={index}
+							imgUrl={item.imgUrl}
+							url={item.url}
 							/>
 						)
 				})}

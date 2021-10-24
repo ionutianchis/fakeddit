@@ -73,6 +73,31 @@ export const storePost = async (title, text, author, upvotes, date) => {
 	}
 }
 
+export const storeImgPost = async (title, imgUrl, author, upvotes, date) => {
+	try {
+		await setDoc(doc(db, 'posts', title), {
+			imgUrl: imgUrl,
+			author: author,
+			upvotes: upvotes,
+			date: date,
+		})
+	} catch (error) {
+		console.error(error)
+	}
+}
+export const storeLinkPost = async (title, url, author, upvotes, date) => {
+	try {
+		await setDoc(doc(db, 'posts', title), {
+			url: url,
+			author: author,
+			upvotes: upvotes,
+			date: date,
+		})
+	} catch (error) {
+		console.error(error)
+	}
+}
+
 export const getPost = async () => {
 	const querySnapshot = await getDocs(collection(db, 'posts'))
 	return querySnapshot
