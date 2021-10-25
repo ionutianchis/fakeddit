@@ -172,9 +172,11 @@
 
 .post-footer-container {
     margin-bottom: 5px;
+    margin-left: 10px;
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: center;
     width: 70%;
 }
 

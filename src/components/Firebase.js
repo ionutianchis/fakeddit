@@ -60,38 +60,41 @@ export const loginUser = async (email, password) => {
 	}
 }
 
-export const storePost = async (title, text, author, upvotes, date) => {
+export const storePost = async (title, text, author, upvotes, date, comments) => {
 	try {
 		await setDoc(doc(db, 'posts', title), {
 			text: text,
 			author: author,
 			upvotes: upvotes,
-			date: date
+			date: date,
+			comments: comments,
 		})
 	} catch (error) {
 		console.error(error)
 	}
 }
 
-export const storeImgPost = async (title, imgUrl, author, upvotes, date) => {
+export const storeImgPost = async (title, imgUrl, author, upvotes, date, comments) => {
 	try {
 		await setDoc(doc(db, 'posts', title), {
 			imgUrl: imgUrl,
 			author: author,
 			upvotes: upvotes,
 			date: date,
+			comments: comments
 		})
 	} catch (error) {
 		console.error(error)
 	}
 }
-export const storeLinkPost = async (title, url, author, upvotes, date) => {
+export const storeLinkPost = async (title, url, author, upvotes, date, comments) => {
 	try {
 		await setDoc(doc(db, 'posts', title), {
 			url: url,
 			author: author,
 			upvotes: upvotes,
 			date: date,
+			comments: comments,
 		})
 	} catch (error) {
 		console.error(error)

@@ -6,17 +6,18 @@ const Category = () => {
 
 	return (
 		<div className='category-chooser'>
-				<Link to='/fakeddit/best/' className='styled-link'>
+
+				<Link to='/fakeddit/hot' className='styled-link'>
 					<div className='button-div'>
-						<img src={require('../images/rocket.png').default} alt='' />
-						<p>Best</p>
+						<img src={require('../images/hot.png').default} alt='' />
+						<p>Hot</p>
 					</div>
 				</Link>
 
 				<Link to='/fakeddit/' className='styled-link'>
 					<div className='button-div'>
-						<img src={require('../images/hot.png').default} alt='' />
-						<p>Hot</p>
+						<img src={require('../images/rocket.png').default} alt='' />
+						<p>Best</p>
 					</div>
 				</Link>
 

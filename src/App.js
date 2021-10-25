@@ -1,12 +1,14 @@
 import React, { useEffect, useState }from 'react'
 import './styles/App.css'
 import Navbar from './components/Navbar'
-import Home from './components/Home'
+import Hot from './components/Hot'
 import Best from './components/Best'
+import New from './components/New'
 import Submit from './components/Submit'
 import { getPost } from './components/Firebase'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { formatDistance } from 'date-fns'
+import FullPost from './components/FullPost'
 
 const App = () => {
 
@@ -23,7 +25,6 @@ const App = () => {
 	
 	const getDbPost = async () => {
 		const post = await getPost()
-		const today = new Date()
 		post.forEach((doc) => {
 			if (doc.data().imgUrl) {
 				setStoredPosts((prevState) => [
@@ -33,7 +34,8 @@ const App = () => {
 						imgUrl: doc.data().imgUrl,
 						author: doc.data().author,
 						upvotes: doc.data().upvotes,
-						date: formatDistance(doc.data().date.toDate(), today),
+						date: doc.data().date.toDate(),
+						comments: doc.data().comments,
 					},
 				])
 			} else if (doc.data().url) {
@@ -44,7 +46,8 @@ const App = () => {
 						url: doc.data().url,
 						author: doc.data().author,
 						upvotes: doc.data().upvotes,
-						date: formatDistance(doc.data().date.toDate(), today),
+						date: doc.data().date.toDate(),
+						comments: doc.data().comments,
 					},
 				])			
 			} else {
@@ -55,17 +58,19 @@ const App = () => {
 						text: doc.data().text,
 						author: doc.data().author,
 						upvotes: doc.data().upvotes,
-						date: formatDistance(doc.data().date.toDate(), today)
+						date: doc.data().date.toDate(),
+						comments: doc.data().comments
 					},
 				])
 			}
 		})
 	}
+	
 	useEffect(() => {
 		getDbPost()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
-	console.log(storedPosts)
+	
 	return (
 		<div className='container'>
 			<BrowserRouter basename='/'>
@@ -79,9 +84,9 @@ const App = () => {
 				<Switch>
 					<Route
 						exact
-						path='/fakeddit/'
+						path='/fakeddit/hot'
 						render={() => (
-							<Home
+							<Hot
 								isLoggedIn={isLoggedIn}
 								storedPosts={storedPosts}
 								setStoredPosts={setStoredPosts}
@@ -90,14 +95,26 @@ const App = () => {
 					/>
 					<Route
 						exact
-						path='/fakeddit/best'
-						render={() => <Best isLoggedIn={isLoggedIn} />}
+						path='/fakeddit/'
+						render={() => (
+							<Best
+								isLoggedIn={isLoggedIn}
+								storedPosts={storedPosts}
+								setStoredPosts={setStoredPosts}
+							/>
+						)}
 					/>
 
 					<Route
 						exact
 						path='/fakeddit/new'
-						render={() => <Home isLoggedIn={isLoggedIn} />}
+						render={() => (
+							<New
+								isLoggedIn={isLoggedIn}
+								storedPosts={storedPosts}
+								setStoredPosts={setStoredPosts}
+							/>
+						)}
 					/>
 
 					<Route
@@ -111,6 +128,12 @@ const App = () => {
 								isLoggedIn={isLoggedIn}
 							/>
 						)}
+					/>
+
+					<Route
+						exact
+						path='/fakeddit/:id'
+						render={() => <FullPost storedPosts={storedPosts} />}
 					/>
 				</Switch>
 			</BrowserRouter>

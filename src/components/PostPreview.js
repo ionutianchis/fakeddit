@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import '../styles/PostPreview.css'
 import { incrementDbVote, decrementDbVote } from './Firebase'
-
+import { useHistory } from 'react-router'
+import { createSlice } from '@reduxjs/toolkit'
+import { formatDistance } from 'date-fns'
 const PostPreview = ({
 	title,
 	text,
@@ -14,16 +16,21 @@ const PostPreview = ({
 	setStoredPosts,
 	index,
 	isLoggedIn,
+	comments,
 }) => {
+
+	const history = useHistory()
 	
 	const [upvoteDisable, setUpvoteDisable] = useState(false)
 	const [downvoteDisable, setDownvoteDisable] = useState(false)
 	
+	const [postReference, setPostReference] = useState()
+
 	const incrementLocalVote = () => {
 		storedPosts[index] = { ...storedPosts[index], upvotes: upvotes + 1 }
 		setStoredPosts([...storedPosts])
 	}
-	// ADD PERSISTENT VISUALS
+
 	const decrementLocalVote = () => {
 		storedPosts[index] = { ...storedPosts[index], upvotes: upvotes - 1 }
 		setStoredPosts([...storedPosts])
@@ -60,11 +67,13 @@ const PostPreview = ({
 		const sliceStr = str.slice(8)
 		return sliceStr.split('/')[0]
 	}
-
-	console.log(getFirstPart('https://test.com/eetststsd'))
+	
+	const handlePostOpen = () => {
+		history.push(`/fakeddit/${index}`)
+	}
 
 	return (
-		<div className='post-container'>
+		<div className='post-container' onClick={handlePostOpen}>
 			<div className='arrow-buttons-div-container'>
 				<div className='arrow-buttons-div'>
 					<button
@@ -89,7 +98,7 @@ const PostPreview = ({
 
 			<div className='post-top-container'>
 				<p>Posted by u/{author}</p>
-				<p>{date} ago</p>
+				<p>{formatDistance(date, new Date())} ago</p>
 			</div>
 
 			<div className='post-middle-container'>
@@ -113,11 +122,15 @@ const PostPreview = ({
 						</div>
 
 						<div className='link-image'>
-							<img src={require('../images/link-preview.png').default}
+							<img
+								src={
+									require('../images/link-preview.png')
+										.default
+								}
 								alt=''
 								onClick={() => window.open(url)}
 							/>
-							
+
 							<img
 								src={require('../images/redirect.png').default}
 								alt=''
@@ -135,7 +148,7 @@ const PostPreview = ({
 						src={require('../images/comments.webp').default}
 						alt=''
 					/>
-					<p>Comments</p>
+					<p>{comments} Comments</p>
 				</div>
 
 				<div className='bottom-icons-div'>

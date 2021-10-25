@@ -12,6 +12,7 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 	const [postContent, setPostContent] = useState({
 		author: loggedInUser,
 		upvotes: 0,
+		comments: 0,
 	})	
 
 	const [error, setError] = useState('')
@@ -91,7 +92,8 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 					postContent.text,
 					postContent.author,
 					postContent.upvotes,
-					Timestamp.fromDate(new Date())
+					Timestamp.fromDate(new Date()),
+					postContent.comments,
 				)
 				setStoredPosts((prevState) => [
 					...prevState,
@@ -100,7 +102,9 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 						text: postContent.text,
 						author: postContent.author,
 						upvotes: postContent.upvotes,
-						date: formatDistance(new Date(), new Date())
+						date: new Date(),
+						comments: postContent.comments,
+
 					}
 				])
 			} else if (imgPost === true) {
@@ -109,7 +113,8 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 					postContent.imgUrl,
 					postContent.author,
 					postContent.upvotes,
-					Timestamp.fromDate(new Date())
+					Timestamp.fromDate(new Date()),
+					postContent.comments
 				)
 				setStoredPosts((prevState) => [
 					...prevState,
@@ -118,7 +123,8 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 						imgUrl: postContent.imgUrl,
 						author: postContent.author,
 						upvotes: postContent.upvotes,
-						date: formatDistance(new Date(), new Date()),
+						date: new Date(),
+						comments: postContent.comments,
 					},
 				])
 			} else if (urlPost === true) {
@@ -127,7 +133,8 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 					postContent.url,
 					postContent.author,
 					postContent.upvotes,
-					Timestamp.fromDate(new Date())
+					Timestamp.fromDate(new Date()),
+					postContent.comments,
 				)
 				setStoredPosts((prevState) => [
 					...prevState,
@@ -136,7 +143,8 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 						url: postContent.url,
 						author: postContent.author,
 						upvotes: postContent.upvotes,
-						date: formatDistance(new Date(), new Date()),
+						date: new Date(),
+						comments: postContent.comments,
 					},
 				])
 			}
@@ -150,6 +158,7 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 		setPostContent({
 			author: loggedInUser,
 			upvotes: 0,
+			comments: 0,
 		})
  		e.target.classList.add('selector-button-active')
 		if (e.target.name === 'text') {
