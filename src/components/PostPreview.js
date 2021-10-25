@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react'
 import '../styles/PostPreview.css'
 import { incrementDbVote, decrementDbVote } from './Firebase'
 import { useHistory } from 'react-router'
-import { createSlice } from '@reduxjs/toolkit'
+import { useDispatch } from 'react-redux'
 import { formatDistance } from 'date-fns'
+import { setIndex } from './redux/referencePost'
+
+
 const PostPreview = ({
 	title,
 	text,
@@ -23,8 +26,6 @@ const PostPreview = ({
 	
 	const [upvoteDisable, setUpvoteDisable] = useState(false)
 	const [downvoteDisable, setDownvoteDisable] = useState(false)
-	
-	const [postReference, setPostReference] = useState()
 
 	const incrementLocalVote = () => {
 		storedPosts[index] = { ...storedPosts[index], upvotes: upvotes + 1 }
@@ -68,12 +69,15 @@ const PostPreview = ({
 		return sliceStr.split('/')[0]
 	}
 	
+	const dispatch = useDispatch()
+	
 	const handlePostOpen = () => {
 		history.push(`/fakeddit/${index}`)
+		dispatch(setIndex(index))		
 	}
 
 	return (
-		<div className='post-container' onClick={handlePostOpen}>
+		<div className='post-container'>
 			<div className='arrow-buttons-div-container'>
 				<div className='arrow-buttons-div'>
 					<button
@@ -95,73 +99,86 @@ const PostPreview = ({
 					/>
 				</div>
 			</div>
+			<div className='post-content-container' onClick={handlePostOpen}>
+				<div className='post-top-container'>
+					<p>Posted by u/{author}</p>
+					<p>{formatDistance(date, new Date())} ago</p>
+				</div>
 
-			<div className='post-top-container'>
-				<p>Posted by u/{author}</p>
-				<p>{formatDistance(date, new Date())} ago</p>
-			</div>
+				<div className='post-middle-container'>
+					<h3>{title}</h3>
 
-			<div className='post-middle-container'>
-				<h3>{title}</h3>
-
-				{imgUrl && (
-					<div className='post-img-container'>
-						<img src={imgUrl} alt='Invalid URL' />
-					</div>
-				)}
-
-				{url && (
-					<div className='url-container'>
-						<div className='anchor-tag-container'>
-							<a href={url}>{getFirstPart(url) + '/'}</a>
-							<span>...</span>
-							<img
-								src={require('../images/redirect.png').default}
-								alt=''
-							/>
+					{imgUrl && (
+						<div className='post-img-container'>
+							<img src={imgUrl} alt='Invalid URL' />
 						</div>
+					)}
 
-						<div className='link-image'>
-							<img
-								src={
-									require('../images/link-preview.png')
-										.default
-								}
-								alt=''
-								onClick={() => window.open(url)}
-							/>
+					{url && (
+						<div className='url-container'>
+							<div className='anchor-tag-container'>
+								<a href={url}>{getFirstPart(url) + '/'}</a>
+								<span>...</span>
+								<img
+									src={
+										require('../images/redirect.png')
+											.default
+									}
+									alt=''
+								/>
+							</div>
 
-							<img
-								src={require('../images/redirect.png').default}
-								alt=''
-							/>
+							<div className='link-image'>
+								<img
+									src={
+										require('../images/link-preview.png')
+											.default
+									}
+									alt=''
+									onClick={() => window.open(url)}
+								/>
+
+								<img
+									src={
+										require('../images/redirect.png')
+											.default
+									}
+									alt=''
+								/>
+							</div>
 						</div>
+					)}
+
+					<p>{text}</p>
+				</div>
+
+				<div className='post-footer-container'>
+					<div className='bottom-icons-div'>
+						<img
+							src={require('../images/comments.webp').default}
+							alt=''
+						/>
+						<p>{comments} Comments</p>
 					</div>
-				)}
 
-				<p>{text}</p>
-			</div>
+					<div className='bottom-icons-div'>
+						<img
+							src={require('../images/award.webp').default}
+							alt=''
+						/>
+						<p>Award</p>
+					</div>
 
-			<div className='post-footer-container'>
-				<div className='bottom-icons-div'>
-					<img
-						src={require('../images/comments.webp').default}
-						alt=''
-					/>
-					<p>{comments} Comments</p>
+					<div className='bottom-icons-div'>
+						<img
+							src={require('../images/share.webp').default}
+							alt=''
+						/>
+						<p>Share</p>
+					</div>
+
+					<div className='save-container'></div>
 				</div>
-
-				<div className='bottom-icons-div'>
-					<img src={require('../images/award.webp').default} alt='' />
-					<p>Award</p>
-				</div>
-
-				<div className='bottom-icons-div'>
-					<img src={require('../images/share.webp').default} alt='' />
-					<p>Share</p>
-				</div>
-
-				<div className='save-container'></div>
 			</div>
 		</div>
 	)

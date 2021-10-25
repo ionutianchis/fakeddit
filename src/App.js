@@ -7,7 +7,6 @@ import New from './components/New'
 import Submit from './components/Submit'
 import { getPost } from './components/Firebase'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import { formatDistance } from 'date-fns'
 import FullPost from './components/FullPost'
 
 const App = () => {

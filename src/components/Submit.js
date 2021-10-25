@@ -3,7 +3,6 @@ import { useHistory } from 'react-router'
 import '../styles/Submit.css'
 import { Timestamp } from '@firebase/firestore'
 import { storeImgPost, storeLinkPost, storePost } from './Firebase'
-import { formatDistance } from 'date-fns'
 
 const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 	
