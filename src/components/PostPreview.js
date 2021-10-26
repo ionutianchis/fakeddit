@@ -39,31 +39,51 @@ const PostPreview = ({
 
 	const handleClick = (e) => {
 		if (e.target.classList.contains('arrow-button-up')) {
+			localStorage.setItem(e.target.name + ' postpreview-upvote', true)
+			localStorage.setItem(e.target.name + ' postpreview-downvote', false)
 			e.target.classList.add('arrow-button-up-active')
 			e.target.nextSibling.nextSibling.classList.remove(
 				'arrow-button-down-active'
 			)
-			setUpvoteDisable(true)
-			setDownvoteDisable(false)
 			incrementDbVote(e)
 			incrementLocalVote(e)
 		} else if (e.target.classList.contains('arrow-button-down')) {
+			localStorage.setItem(e.target.name + ' postpreview-downvote',true)
+			localStorage.setItem(e.target.name + ' postpreview-upvote', false)
 			e.target.classList.add('arrow-button-down-active')
 			e.target.previousSibling.previousSibling.classList.remove(
 				'arrow-button-up-active'
 			)
-			setDownvoteDisable(true)
-			setUpvoteDisable(false)
 			decrementDbVote(e)
 			decrementLocalVote()
 		}
 	}
-
+	
 	useEffect(() => {
 		setUpvoteDisable(!isLoggedIn)
 		setDownvoteDisable(!isLoggedIn)			// change vote ability after login
 	}, [isLoggedIn])
 
+	useEffect(() => {
+		if (isLoggedIn === true) {
+			setUpvoteDisable(
+				JSON.parse(
+					localStorage.getItem(
+						title + ' postpreview-upvote'
+					)
+				)
+			)
+			setDownvoteDisable(
+				JSON.parse(
+					localStorage.getItem(
+						title + ' postpreview-downvote'
+					)
+				)
+			)
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [upvotes])
+	
 	const getFirstPart = (str) => {
 		const sliceStr = str.slice(8)
 		return sliceStr.split('/')[0]
@@ -76,13 +96,16 @@ const PostPreview = ({
 		dispatch(setIndex(index))		
 	}
 
+    let upvoteButtonClass = upvoteDisable ? 'arrow-button-up-active' : ''
+    let downvoteButtonClass = downvoteDisable ? 'arrow-button-down-active' : ''
+	
 	return (
 		<div className='post-container'>
 			<div className='arrow-buttons-div-container'>
 				<div className='arrow-buttons-div'>
 					<button
 						type='button'
-						className='arrow-button arrow-button-up'
+						className={`arrow-button arrow-button-up ${upvoteButtonClass}`}
 						name={title}
 						onClick={(e) => handleClick(e)}
 						disabled={upvoteDisable}
@@ -92,7 +115,7 @@ const PostPreview = ({
 
 					<button
 						type='button'
-						className='arrow-button arrow-button-down'
+						className={`arrow-button arrow-button-down ${downvoteButtonClass}`}
 						name={title}
 						onClick={(e) => handleClick(e)}
 						disabled={downvoteDisable}
@@ -158,7 +181,7 @@ const PostPreview = ({
 							src={require('../images/comments.webp').default}
 							alt=''
 						/>
-						<p>{comments} Comments</p>
+						<p>{comments.length} Comments</p>
 					</div>
 
 					<div className='bottom-icons-div'>

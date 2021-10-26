@@ -87,6 +87,7 @@ export const storeImgPost = async (title, imgUrl, author, upvotes, date, comment
 		console.error(error)
 	}
 }
+
 export const storeLinkPost = async (title, url, author, upvotes, date, comments) => {
 	try {
 		await setDoc(doc(db, 'posts', title), {
@@ -101,11 +102,30 @@ export const storeLinkPost = async (title, url, author, upvotes, date, comments)
 	}
 }
 
+
 export const getPost = async () => {
 	const querySnapshot = await getDocs(collection(db, 'posts'))
 	return querySnapshot
 }
 
+export const storePostComment = async (postTitle, comment) => {
+	const post = await getPost()
+	post.forEach((currDoc) => {
+		if (currDoc.id === postTitle) {
+			const postRef = doc(db, 'posts', postTitle)
+			try {
+				setDoc(
+					postRef,
+						{ comments: [...currDoc.data().comments, comment] },
+						{ merge: true }
+				)
+			} catch (error) {
+				console.error(error)
+			}
+		}
+	})
+		
+}
 
 export const incrementDbVote = async (e) => {
 	const post = await getPost()

@@ -11,7 +11,7 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 	const [postContent, setPostContent] = useState({
 		author: loggedInUser,
 		upvotes: 0,
-		comments: 0,
+		comments: [],
 	})	
 
 	const [error, setError] = useState('')
@@ -157,7 +157,7 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 		setPostContent({
 			author: loggedInUser,
 			upvotes: 0,
-			comments: 0,
+			comments: [],
 		})
  		e.target.classList.add('selector-button-active')
 		if (e.target.name === 'text') {

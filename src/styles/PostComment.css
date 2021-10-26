@@ -1,0 +1,79 @@
+.post-comment-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.post-comment-top-div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: #d7dadc;
+    font-size: 13px;
+    margin-left: 9px;
+}
+
+.post-comment-top-div h3 {
+    font-weight: bold;
+}
+
+.post-comment-top-div span {
+    margin-left: 15px;
+}
+
+.post-comment-middle-div {
+    margin-left: 9px;
+    height: auto;
+    white-space: initial;
+    word-wrap: break-word;
+}
+
+.post-comment-bottom-div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 20px;
+    margin-left: 5px;
+}
+
+.comment-arrows-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.comment-arrows-container span {
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+
+.comment-reply-div {
+    display: flex;
+    align-items: center;
+    margin-left: 15px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.comment-reply-div:hover {
+    background-color:rgba(126, 126, 126, 0.2);
+
+}
+
+.comment-reply-div img {
+    width: 20px;
+    height: 20px;
+}
+
+.comment-reply-div span {
+    margin-left: 5px;
+    color: #75797c;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+
+
+

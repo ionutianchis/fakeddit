@@ -58,7 +58,7 @@ const App = () => {
 						author: doc.data().author,
 						upvotes: doc.data().upvotes,
 						date: doc.data().date.toDate(),
-						comments: doc.data().comments
+						comments: doc.data().comments,
 					},
 				])
 			}
@@ -132,7 +132,7 @@ const App = () => {
 					<Route
 						exact
 						path='/fakeddit/:id'
-						render={() => <FullPost storedPosts={storedPosts} />}
+						render={() => <FullPost storedPosts={storedPosts} setStoredPosts={setStoredPosts}/>}
 					/>
 				</Switch>
 			</BrowserRouter>
