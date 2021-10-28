@@ -14,7 +14,7 @@ const PostComment = ({
 	setComments,
 	isLoggedIn
 }) => {
-	
+
 	const [upvoteDisable, setUpvoteDisable] = useState(false)
 	const [downvoteDisable, setDownvoteDisable] = useState(false)
 		
@@ -35,51 +35,53 @@ const PostComment = ({
 	}
 
 	const handleUpvote = (e) => {
-		incrementLocalVote()
- 		incrementDbCommentVote(postTitle, date)
- 		localStorage.setItem(
-			e.target.name + ' comment' + [index] + ' upvote',
-			true
-		)
-		
-	 	localStorage.setItem(
-			e.target.name + ' comment' + [index] + ' downvote',
-			false
-		)
+		if (isLoggedIn === true) {
+			incrementLocalVote()
+			 incrementDbCommentVote(postTitle, date)
+			 localStorage.setItem(
+				e.target.name + ' comment' + [index] + ' upvote',
+				true
+			)
+			
+			 localStorage.setItem(
+				e.target.name + ' comment' + [index] + ' downvote',
+				false
+			)
+		}
 	}
 
 	const handleDownvote = (e) => {
-		decrementLocalVote()
-		decrementDbCommentVote(postTitle, date)
-		localStorage.setItem(
-			e.target.name + ' comment' + [index] + ' downvote',
-			true
-		)
-
-		localStorage.setItem(
-			e.target.name + ' comment' + [index] + ' upvote',
-			false
-		)
+		if (isLoggedIn === true) {
+			decrementLocalVote()
+			decrementDbCommentVote(postTitle, date)
+			localStorage.setItem(
+				e.target.name + ' comment' + [index] + ' downvote',
+				true
+			)
+	
+			localStorage.setItem(
+				e.target.name + ' comment' + [index] + ' upvote',
+				false
+			)
+		}
 	}
 
 	useEffect(() => {
-		if (isLoggedIn === true) {
-			setUpvoteDisable(
-				JSON.parse(
-					localStorage.getItem(
-						postTitle + ' comment' + [index] + ' upvote'
-					)
+		setUpvoteDisable(
+			JSON.parse(
+				localStorage.getItem(
+					postTitle + ' comment' + [index] + ' upvote'
 				)
 			)
+		)
 
-			setDownvoteDisable(
-				JSON.parse(
-					localStorage.getItem(
-						postTitle + ' comment' + [index] + ' downvote'
-					)
+		setDownvoteDisable(
+			JSON.parse(
+				localStorage.getItem(
+					postTitle + ' comment' + [index] + ' downvote'
 				)
 			)
-		}
+		)
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [upvotes])
 

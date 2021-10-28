@@ -7,13 +7,18 @@ import PostComment from "./PostComment"
 import { storePostComment } from "./Firebase"
 import { incrementDbVote, decrementDbVote } from './Firebase'
 
-const FullPost = ({ isLoggedIn, storedPosts, setStoredPosts, comments, setComments}) => {
-
+const FullPost = ({
+	isLoggedIn,
+	storedPosts,
+	setStoredPosts,
+	comments,
+	setComments,
+	loggedUser,
+}) => {
 	const { post } = useSelector((state) => state.post)
 	const currPost = storedPosts[post]
 
-	const currPostComments = comments.filter(x => x.post === currPost.title)
-	
+	const currPostComments = comments.filter((x) => x.post === currPost.title)
 	const [upvoteDisable, setUpvoteDisable] = useState(false)
 
 	const [downvoteDisable, setDownvoteDisable] = useState(false)
@@ -24,12 +29,18 @@ const FullPost = ({ isLoggedIn, storedPosts, setStoredPosts, comments, setCommen
 	const [commentEmpty, setCommentEmpty] = useState(true)
 
 	const incrementLocalVote = () => {
-		storedPosts[post] = { ...storedPosts[post], upvotes: currPost.upvotes + 1 }
+		storedPosts[post] = {
+			...storedPosts[post],
+			upvotes: currPost.upvotes + 1,
+		}
 		setStoredPosts([...storedPosts])
 	}
 
 	const decrementLocalVote = () => {
-		storedPosts[post] = { ...storedPosts[post], upvotes: currPost.upvotes - 1 }
+		storedPosts[post] = {
+			...storedPosts[post],
+			upvotes: currPost.upvotes - 1,
+		}
 		setStoredPosts([...storedPosts])
 	}
 
@@ -54,11 +65,10 @@ const FullPost = ({ isLoggedIn, storedPosts, setStoredPosts, comments, setCommen
 			decrementLocalVote()
 		}
 	}
-	
+
 	useEffect(() => {
 		if (input.length > 0) setCommentEmpty(false)
 	}, [input])
-
 
 	const handleCommentSubmit = () => {
 		if (isLoggedIn === true) {
@@ -67,15 +77,15 @@ const FullPost = ({ isLoggedIn, storedPosts, setStoredPosts, comments, setCommen
 				{
 					post: currPost.title,
 					text: input,
-					author: currPost.author,
+					author: loggedUser,
 					date: new Date(),
 					upvotes: 0,
 				},
 			])
-			 setCommentContent({
+			setCommentContent({
 				...commentContent,
 				text: input,
-				author: currPost.author,
+				author: loggedUser,
 				date: new Date(),
 				upvotes: 0,
 			})
@@ -85,7 +95,7 @@ const FullPost = ({ isLoggedIn, storedPosts, setStoredPosts, comments, setCommen
 		}
 	}
 
- 	useEffect(() => {
+	useEffect(() => {
 		if (commentContent.author) {
 			storePostComment(
 				currPost.title,
@@ -98,21 +108,21 @@ const FullPost = ({ isLoggedIn, storedPosts, setStoredPosts, comments, setCommen
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [commentContent])
 
-		useEffect(() => {
-			if (isLoggedIn === true && currPost) {
-				setUpvoteDisable(
-					JSON.parse(localStorage.getItem(currPost.title + ' upvote'))
-				)
-				setDownvoteDisable(
-					JSON.parse(localStorage.getItem(currPost.title + ' downvote'))
-				)
-			}
-			// eslint-disable-next-line react-hooks/exhaustive-deps
-		}, [currPost])
-	
-    let upvoteButtonClass = upvoteDisable ? 'arrow-button-up-active' : ''
+	useEffect(() => {
+		if (isLoggedIn === true && currPost) {
+			setUpvoteDisable(
+				JSON.parse(localStorage.getItem(currPost.title + ' upvote'))
+			)
+			setDownvoteDisable(
+				JSON.parse(localStorage.getItem(currPost.title + ' downvote'))
+			)
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currPost])
+
+	let upvoteButtonClass = upvoteDisable ? 'arrow-button-up-active' : ''
 	let downvoteButtonClass = downvoteDisable ? 'arrow-button-down-active' : ''
-	
+
 	return (
 		<div className='fullpost-container'>
 			{currPost && (

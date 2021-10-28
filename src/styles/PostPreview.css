@@ -94,14 +94,15 @@
     font-size: 13px;
     max-width: 90%;
     min-height: 80px;
-    max-height: 700px;
+    max-height: 800px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
 .post-img-container {
-    height: 90%;
+    height: auto;
+    overflow: hidden;
 }
 
 .post-img-container img {
@@ -172,12 +173,13 @@
 
 .post-footer-container {
     margin-left: 10px;
-    margin-top: 30px;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     width: 70%;
+    position: absolute;
+    bottom: 0;
 }
 
 .post-footer-container img {

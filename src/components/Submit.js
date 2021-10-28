@@ -55,8 +55,7 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 				} else if (postContent.imgUrl === undefined) {
 					setError('Image URL cannot be empty.')
 				} else if (
-					!postContent.imgUrl.includes('https://') ||
-					!postContent.imgUrl.includes('.com')
+					!postContent.imgUrl.includes('https://')
 				) {
 					setError('Invalid image URL.')
 				} else {
@@ -215,6 +214,7 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 						type='text'
 						name='title'
 						placeholder='Title'
+						value={postContent.title || ''}
 						onChange={(e) => handleChange(e)}
 					/>
 

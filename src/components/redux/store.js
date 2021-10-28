@@ -3,6 +3,7 @@ import postSliceReducer from './referencePost'
 
 export default configureStore({
     reducer: {
-        post: postSliceReducer
+        post: postSliceReducer,
+        
     }
 })

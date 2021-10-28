@@ -30,34 +30,40 @@ const PostPreview = ({
 	const [downvoteDisable, setDownvoteDisable] = useState(false)
 
 	const incrementLocalVote = () => {
-		storedPosts[index] = { ...storedPosts[index], upvotes: upvotes + 1 }
-		setStoredPosts([...storedPosts])
+		if (isLoggedIn === true) {
+			storedPosts[index] = { ...storedPosts[index], upvotes: upvotes + 1 }
+			setStoredPosts([...storedPosts])
+		}
 	}
 
 	const decrementLocalVote = () => {
-		storedPosts[index] = { ...storedPosts[index], upvotes: upvotes - 1 }
-		setStoredPosts([...storedPosts])
+		if (isLoggedIn === true) {
+			storedPosts[index] = { ...storedPosts[index], upvotes: upvotes - 1 }
+			setStoredPosts([...storedPosts])
+		}
 	}
 
 	const handleClick = (e) => {
-		if (e.target.classList.contains('arrow-button-up')) {
-			localStorage.setItem(e.target.name + ' upvote', true)
-			localStorage.setItem(e.target.name + ' downvote', false)
-			e.target.classList.add('arrow-button-up-active')
-			e.target.nextSibling.nextSibling.classList.remove(
-				'arrow-button-down-active'
-			)
-			incrementDbVote(e)
-			incrementLocalVote(e)
-		} else if (e.target.classList.contains('arrow-button-down')) {
-			localStorage.setItem(e.target.name + ' downvote',true)
-			localStorage.setItem(e.target.name + ' upvote', false)
-			e.target.classList.add('arrow-button-down-active')
-			e.target.previousSibling.previousSibling.classList.remove(
-				'arrow-button-up-active'
-			)
-			decrementDbVote(e)
-			decrementLocalVote()
+		if (isLoggedIn === true) {
+			if (e.target.classList.contains('arrow-button-up')) {
+				localStorage.setItem(e.target.name + ' upvote', true)
+				localStorage.setItem(e.target.name + ' downvote', false)
+				e.target.classList.add('arrow-button-up-active')
+				e.target.nextSibling.nextSibling.classList.remove(
+					'arrow-button-down-active'
+				)
+				incrementDbVote(e)
+				incrementLocalVote(e)
+			} else if (e.target.classList.contains('arrow-button-down')) {
+				localStorage.setItem(e.target.name + ' downvote',true)
+				localStorage.setItem(e.target.name + ' upvote', false)
+				e.target.classList.add('arrow-button-down-active')
+				e.target.previousSibling.previousSibling.classList.remove(
+					'arrow-button-up-active'
+				)
+				decrementDbVote(e)
+				decrementLocalVote()
+			}
 		}
 	}
 	
@@ -67,22 +73,20 @@ const PostPreview = ({
 	}, [isLoggedIn])
 
 	useEffect(() => {
-		if (isLoggedIn === true) {
-			setUpvoteDisable(
-				JSON.parse(
-					localStorage.getItem(
-						title + ' upvote'
-					)
+		setUpvoteDisable(
+			JSON.parse(
+				localStorage.getItem(
+					title + ' upvote'
 				)
 			)
-			setDownvoteDisable(
-				JSON.parse(
-					localStorage.getItem(
-						title + ' downvote'
-					)
+		)
+		setDownvoteDisable(
+			JSON.parse(
+				localStorage.getItem(
+					title + ' downvote'
 				)
 			)
-		}
+		)
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [upvotes])
 	

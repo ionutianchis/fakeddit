@@ -23,7 +23,6 @@ const App = () => {
 
 	const [comments, setComments] = useState([])
 
-	
 	const getDbPost = async () => {
 		const post = await getPost()
 		post.forEach((doc) => {
@@ -158,6 +157,7 @@ const App = () => {
 								setStoredPosts={setStoredPosts}
 								comments={comments}
 								setComments={setComments}
+								loggedUser={loggedInUser}
 							/>
 						)}
 					/>

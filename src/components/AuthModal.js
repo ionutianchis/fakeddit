@@ -56,7 +56,7 @@ const AuthModal = ({
 			setError('Field/s cannot be empty!')
 		} else if (
 			!signUpCredentials.email.includes('@') ||
-			!signUpCredentials.email.includes('.com')
+			!signUpCredentials.email.includes('.')
 		) {
 			setError('Email is incorrect.')
 		} else if (signUpCredentials.pass.length < 6) {
