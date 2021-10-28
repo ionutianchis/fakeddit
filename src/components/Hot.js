@@ -4,8 +4,12 @@ import NewPost from './NewPost'
 import Category from './Category'
 import PostPreview from './PostPreview'
 
-const Hot = ({ isLoggedIn, storedPosts, setStoredPosts }) => {
-	
+const Hot = ({
+	isLoggedIn,
+	storedPosts,
+	setStoredPosts,
+	comments,
+}) => {
 	const hotPosts = storedPosts.sort((a, b) => b.upvotes - a.upvotes)
 
 	return (
@@ -28,7 +32,7 @@ const Hot = ({ isLoggedIn, storedPosts, setStoredPosts }) => {
 						index={index}
 						imgUrl={item.imgUrl}
 						url={item.url}
-						comments={item.comments}
+						comments={comments}
 					/>
 				)
 			})}

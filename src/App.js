@@ -5,7 +5,7 @@ import Hot from './components/Hot'
 import Best from './components/Best'
 import New from './components/New'
 import Submit from './components/Submit'
-import { getPost } from './components/Firebase'
+import { getComments, getPost } from './components/Firebase'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import FullPost from './components/FullPost'
 
@@ -21,6 +21,8 @@ const App = () => {
 
 	const [storedPosts, setStoredPosts] = useState([])
 
+	const [comments, setComments] = useState([])
+
 	
 	const getDbPost = async () => {
 		const post = await getPost()
@@ -34,7 +36,6 @@ const App = () => {
 						author: doc.data().author,
 						upvotes: doc.data().upvotes,
 						date: doc.data().date.toDate(),
-						comments: doc.data().comments,
 					},
 				])
 			} else if (doc.data().url) {
@@ -46,7 +47,6 @@ const App = () => {
 						author: doc.data().author,
 						upvotes: doc.data().upvotes,
 						date: doc.data().date.toDate(),
-						comments: doc.data().comments,
 					},
 				])			
 			} else {
@@ -58,15 +58,31 @@ const App = () => {
 						author: doc.data().author,
 						upvotes: doc.data().upvotes,
 						date: doc.data().date.toDate(),
-						comments: doc.data().comments,
 					},
 				])
 			}
 		})
 	}
 	
+	const getDbComments = async () => {
+		const comment = await getComments()
+		comment.forEach((doc) => {
+			setComments((prevState) => [
+				...prevState,
+				{
+					post: doc.data().post,
+					author: doc.data().author,
+					text: doc.data().text,
+					date: doc.data().date.toDate(),
+					upvotes: doc.data().upvotes,
+				},
+			])
+		})
+	}
+
 	useEffect(() => {
 		getDbPost()
+		getDbComments()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 	
@@ -89,6 +105,7 @@ const App = () => {
 								isLoggedIn={isLoggedIn}
 								storedPosts={storedPosts}
 								setStoredPosts={setStoredPosts}
+								comments={comments}
 							/>
 						)}
 					/>
@@ -100,6 +117,7 @@ const App = () => {
 								isLoggedIn={isLoggedIn}
 								storedPosts={storedPosts}
 								setStoredPosts={setStoredPosts}
+								comments={comments}
 							/>
 						)}
 					/>
@@ -112,6 +130,7 @@ const App = () => {
 								isLoggedIn={isLoggedIn}
 								storedPosts={storedPosts}
 								setStoredPosts={setStoredPosts}
+								comments={comments}
 							/>
 						)}
 					/>
@@ -132,7 +151,15 @@ const App = () => {
 					<Route
 						exact
 						path='/fakeddit/:id'
-						render={() => <FullPost storedPosts={storedPosts} setStoredPosts={setStoredPosts}/>}
+						render={() => (
+							<FullPost
+								isLoggedIn={isLoggedIn}
+								storedPosts={storedPosts}
+								setStoredPosts={setStoredPosts}
+								comments={comments}
+								setComments={setComments}
+							/>
+						)}
 					/>
 				</Switch>
 			</BrowserRouter>

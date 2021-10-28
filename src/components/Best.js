@@ -5,17 +5,20 @@ import PostPreview from './PostPreview'
 import About from './About'
 import '../styles/Best.css'
 
-const Best = ({ isLoggedIn, storedPosts, setStoredPosts}) => {
-	
-    const bestPosts = storedPosts.sort((a, b) => b.comments - a.comments)
-    
-    return (
+const Best = ({
+	isLoggedIn,
+	storedPosts,
+	setStoredPosts,
+	comments,
+}) => {
+
+	return (
 		<div className='middle-container'>
 			<div className='best-container'>
 				{isLoggedIn && <NewPost />}
 				<Category />
 
-				{bestPosts.map((item, index) => {
+				{storedPosts.map((item, index) => {
 					return (
 						<PostPreview
 							key={index}
@@ -30,7 +33,7 @@ const Best = ({ isLoggedIn, storedPosts, setStoredPosts}) => {
 							index={index}
 							imgUrl={item.imgUrl}
 							url={item.url}
-							comments={item.comments}
+							comments={comments}
 						/>
 					)
 				})}

@@ -5,49 +5,114 @@ import formatDistance from "date-fns/formatDistance"
 import About from "./About"
 import PostComment from "./PostComment"
 import { storePostComment } from "./Firebase"
+import { incrementDbVote, decrementDbVote } from './Firebase'
 
-const FullPost = ({ storedPosts, setStoredPosts}) => {
+const FullPost = ({ isLoggedIn, storedPosts, setStoredPosts, comments, setComments}) => {
 
 	const { post } = useSelector((state) => state.post)
 	const currPost = storedPosts[post]
 
-	const [commentContent, setCommentContent] = useState({})
+	const currPostComments = comments.filter(x => x.post === currPost.title)
+	
+	const [upvoteDisable, setUpvoteDisable] = useState(false)
+
+	const [downvoteDisable, setDownvoteDisable] = useState(false)
+
 	const [input, setInput] = useState('')
 
+	const [commentContent, setCommentContent] = useState({})
 	const [commentEmpty, setCommentEmpty] = useState(true)
 
+	const incrementLocalVote = () => {
+		storedPosts[post] = { ...storedPosts[post], upvotes: currPost.upvotes + 1 }
+		setStoredPosts([...storedPosts])
+	}
+
+	const decrementLocalVote = () => {
+		storedPosts[post] = { ...storedPosts[post], upvotes: currPost.upvotes - 1 }
+		setStoredPosts([...storedPosts])
+	}
+
+	const handleClick = (e) => {
+		if (e.target.classList.contains('arrow-button-up')) {
+			localStorage.setItem(e.target.name + ' upvote', true)
+			localStorage.setItem(e.target.name + ' downvote', false)
+			e.target.classList.add('arrow-button-up-active')
+			e.target.nextSibling.nextSibling.classList.remove(
+				'arrow-button-down-active'
+			)
+			incrementDbVote(e)
+			incrementLocalVote(e)
+		} else if (e.target.classList.contains('arrow-button-down')) {
+			localStorage.setItem(e.target.name + ' downvote', true)
+			localStorage.setItem(e.target.name + ' upvote', false)
+			e.target.classList.add('arrow-button-down-active')
+			e.target.previousSibling.previousSibling.classList.remove(
+				'arrow-button-up-active'
+			)
+			decrementDbVote(e)
+			decrementLocalVote()
+		}
+	}
+	
 	useEffect(() => {
 		if (input.length > 0) setCommentEmpty(false)
 	}, [input])
 
-	const updateComments = () => {
-		if (storedPosts[post]) {
-			storedPosts[post] = {
-				...storedPosts[post],
-				comments: [...storedPosts[post].comments, commentContent],
-			}
-			setStoredPosts([...storedPosts])
+
+	const handleCommentSubmit = () => {
+		if (isLoggedIn === true) {
+			setComments([
+				...comments,
+				{
+					post: currPost.title,
+					text: input,
+					author: currPost.author,
+					date: new Date(),
+					upvotes: 0,
+				},
+			])
+			 setCommentContent({
+				...commentContent,
+				text: input,
+				author: currPost.author,
+				date: new Date(),
+				upvotes: 0,
+			})
+			setInput('')
+		} else {
+			alert('You must be logged in to comment !')
 		}
 	}
 
-	const handleCommentSubmit = () => {
-		setCommentContent({
-			...commentContent,
-			text: input,
-			author: currPost.author,
-			date: new Date(),
-			upvotes: 0,
-		})
-	}
-
-	useEffect(() => {
+ 	useEffect(() => {
 		if (commentContent.author) {
-			updateComments()
-			storePostComment(storedPosts[post].title, commentContent)
+			storePostComment(
+				currPost.title,
+				commentContent.author,
+				commentContent.text,
+				commentContent.date,
+				commentContent.upvotes
+			)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [commentContent])
 
+		useEffect(() => {
+			if (isLoggedIn === true && currPost) {
+				setUpvoteDisable(
+					JSON.parse(localStorage.getItem(currPost.title + ' upvote'))
+				)
+				setDownvoteDisable(
+					JSON.parse(localStorage.getItem(currPost.title + ' downvote'))
+				)
+			}
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, [currPost])
+	
+    let upvoteButtonClass = upvoteDisable ? 'arrow-button-up-active' : ''
+	let downvoteButtonClass = downvoteDisable ? 'arrow-button-down-active' : ''
+	
 	return (
 		<div className='fullpost-container'>
 			{currPost && (
@@ -56,14 +121,20 @@ const FullPost = ({ storedPosts, setStoredPosts}) => {
 						<div className='fullpost-arrow-buttons-container'>
 							<button
 								type='button'
-								className='arrow-button arrow-button-up'
+								className={`arrow-button arrow-button-up ${upvoteButtonClass}`}
+								disabled={upvoteDisable}
+								name={currPost.title}
+								onClick={(e) => handleClick(e)}
 							/>
 
 							<span>{currPost.upvotes}</span>
 
 							<button
 								type='button'
-								className='arrow-button arrow-button-down'
+								className={`arrow-button arrow-button-down ${downvoteButtonClass}`}
+								disabled={downvoteDisable}
+								name={currPost.title}
+								onClick={(e) => handleClick(e)}
 							/>
 						</div>
 
@@ -131,6 +202,7 @@ const FullPost = ({ storedPosts, setStoredPosts}) => {
 									name='text'
 									rows='9'
 									placeholder='What are your thoughts ?'
+									value={input}
 									onChange={(e) => setInput(e.target.value)}
 								/>
 
@@ -153,7 +225,7 @@ const FullPost = ({ storedPosts, setStoredPosts}) => {
 									}
 									alt=''
 								/>
-								<span>{currPost.comments.length} Comments</span>
+								<span>{currPostComments.length} Comments</span>
 							</div>
 
 							<div className='fullPost-icons-div'>
@@ -177,21 +249,26 @@ const FullPost = ({ storedPosts, setStoredPosts}) => {
 							</div>
 						</div>
 					</div>
-					{currPost.comments.map((item, index) => {
+					{currPostComments.map((item, index) => {
 						return (
 							<PostComment
 								key={index}
+								currPostComments={currPostComments}
+								setComments={setComments}
+								index={index}
+								postTitle={currPost.title}
 								author={item.author}
 								text={item.text}
-								upvotes={item.upvotes}
 								date={item.date}
+								upvotes={item.upvotes}
+								isLoggedIn={isLoggedIn}
 							/>
 						)
 					})}
 				</div>
 			)}
 
-			<About/>
+			<About />
 		</div>
 	)
 }

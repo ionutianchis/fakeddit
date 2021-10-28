@@ -23,7 +23,9 @@ const PostPreview = ({
 }) => {
 
 	const history = useHistory()
-	
+
+	const currPostComments = comments.filter(x => x.post === title)
+
 	const [upvoteDisable, setUpvoteDisable] = useState(false)
 	const [downvoteDisable, setDownvoteDisable] = useState(false)
 
@@ -39,8 +41,8 @@ const PostPreview = ({
 
 	const handleClick = (e) => {
 		if (e.target.classList.contains('arrow-button-up')) {
-			localStorage.setItem(e.target.name + ' postpreview-upvote', true)
-			localStorage.setItem(e.target.name + ' postpreview-downvote', false)
+			localStorage.setItem(e.target.name + ' upvote', true)
+			localStorage.setItem(e.target.name + ' downvote', false)
 			e.target.classList.add('arrow-button-up-active')
 			e.target.nextSibling.nextSibling.classList.remove(
 				'arrow-button-down-active'
@@ -48,8 +50,8 @@ const PostPreview = ({
 			incrementDbVote(e)
 			incrementLocalVote(e)
 		} else if (e.target.classList.contains('arrow-button-down')) {
-			localStorage.setItem(e.target.name + ' postpreview-downvote',true)
-			localStorage.setItem(e.target.name + ' postpreview-upvote', false)
+			localStorage.setItem(e.target.name + ' downvote',true)
+			localStorage.setItem(e.target.name + ' upvote', false)
 			e.target.classList.add('arrow-button-down-active')
 			e.target.previousSibling.previousSibling.classList.remove(
 				'arrow-button-up-active'
@@ -69,14 +71,14 @@ const PostPreview = ({
 			setUpvoteDisable(
 				JSON.parse(
 					localStorage.getItem(
-						title + ' postpreview-upvote'
+						title + ' upvote'
 					)
 				)
 			)
 			setDownvoteDisable(
 				JSON.parse(
 					localStorage.getItem(
-						title + ' postpreview-downvote'
+						title + ' downvote'
 					)
 				)
 			)
@@ -181,7 +183,7 @@ const PostPreview = ({
 							src={require('../images/comments.webp').default}
 							alt=''
 						/>
-						<p>{comments.length} Comments</p>
+						<p>{currPostComments.length} Comments</p>
 					</div>
 
 					<div className='bottom-icons-div'>

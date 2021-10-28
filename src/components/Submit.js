@@ -11,7 +11,6 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 	const [postContent, setPostContent] = useState({
 		author: loggedInUser,
 		upvotes: 0,
-		comments: [],
 	})	
 
 	const [error, setError] = useState('')
@@ -38,42 +37,46 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 	}
 
 	const postValidation = () => {
-		if (textPost === true) {
-			if (postContent.title === undefined) {
-				setError('Title cannot be empty.')
-			} else if (postContent.text === undefined) {
-				setError('Text cannot be empty.')
-			} else {
-				setFormSubmitted(true)
-				return true
-			}
-		} else if (imgPost === true) {
-			if (postContent.title === undefined) {
-				setError('Title cannot be empty.')
-			} else if (postContent.imgUrl === undefined) {
-				setError('Image URL cannot be empty.')
-			} else if (
-				!postContent.imgUrl.includes('https://') ||
-				!postContent.imgUrl.includes('.com')
-			) {
-				setError('Invalid image URL.')
-			} else {
-				setFormSubmitted(true)
-				return true
-			}
-		} else if (urlPost === true) {
-			if (postContent.title === undefined) {
-				setError('Title cannot be empty.')
-			} else if (postContent.url === undefined) {
-				setError('URL cannot be empty.')
-			} else if (
-				!postContent.url.includes('https://') ||
-				!postContent.url.includes('.com')
-			) {
-				setError('Invalid URL.')
-			} else {
-				setFormSubmitted(true)
-				return true
+		if (storedPosts.find((x) => x.title === postContent.title)) {
+			setError('This title post already exists ! Maybe try something else ?')
+		} else {
+			if (textPost === true) {
+				if (postContent.title === undefined) {
+					setError('Title cannot be empty.')
+				} else if (postContent.text === undefined) {
+					setError('Text cannot be empty.')
+				} else {
+					setFormSubmitted(true)
+					return true
+				}
+			} else if (imgPost === true) {
+				if (postContent.title === undefined) {
+					setError('Title cannot be empty.')
+				} else if (postContent.imgUrl === undefined) {
+					setError('Image URL cannot be empty.')
+				} else if (
+					!postContent.imgUrl.includes('https://') ||
+					!postContent.imgUrl.includes('.com')
+				) {
+					setError('Invalid image URL.')
+				} else {
+					setFormSubmitted(true)
+					return true
+				}
+			} else if (urlPost === true) {
+				if (postContent.title === undefined) {
+					setError('Title cannot be empty.')
+				} else if (postContent.url === undefined) {
+					setError('URL cannot be empty.')
+				} else if (
+					!postContent.url.includes('https://') ||
+					!postContent.url.includes('.com')
+				) {
+					setError('Invalid URL.')
+				} else {
+					setFormSubmitted(true)
+					return true
+				}
 			}
 		}
 	}
@@ -92,7 +95,6 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 					postContent.author,
 					postContent.upvotes,
 					Timestamp.fromDate(new Date()),
-					postContent.comments,
 				)
 				setStoredPosts((prevState) => [
 					...prevState,
@@ -102,7 +104,6 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 						author: postContent.author,
 						upvotes: postContent.upvotes,
 						date: new Date(),
-						comments: postContent.comments,
 
 					}
 				])
@@ -113,7 +114,6 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 					postContent.author,
 					postContent.upvotes,
 					Timestamp.fromDate(new Date()),
-					postContent.comments
 				)
 				setStoredPosts((prevState) => [
 					...prevState,
@@ -123,7 +123,6 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 						author: postContent.author,
 						upvotes: postContent.upvotes,
 						date: new Date(),
-						comments: postContent.comments,
 					},
 				])
 			} else if (urlPost === true) {
@@ -133,7 +132,6 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 					postContent.author,
 					postContent.upvotes,
 					Timestamp.fromDate(new Date()),
-					postContent.comments,
 				)
 				setStoredPosts((prevState) => [
 					...prevState,
@@ -143,7 +141,6 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 						author: postContent.author,
 						upvotes: postContent.upvotes,
 						date: new Date(),
-						comments: postContent.comments,
 					},
 				])
 			}
@@ -157,7 +154,6 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 		setPostContent({
 			author: loggedInUser,
 			upvotes: 0,
-			comments: [],
 		})
  		e.target.classList.add('selector-button-active')
 		if (e.target.name === 'text') {

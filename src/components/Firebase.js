@@ -12,6 +12,7 @@ import {
 	signInWithEmailAndPassword,
 	signOut
 } from 'firebase/auth'
+import { v4 as uuidv4 } from 'uuid'
 
 const firebaseApp = initializeApp({
 	apiKey: 'AIzaSyAHL_OMClzsJ1Y-2qiyGsAegwwQE2JS8tw',
@@ -46,7 +47,7 @@ export const addUser = async (email, password, name) => {
 	}
 }
 
-export const getUserName = async (email) => {
+export const getUserName = async () => {
 	const querySnapshot = await getDocs(collection(db, 'users'))
 	return querySnapshot
 }
@@ -60,42 +61,39 @@ export const loginUser = async (email, password) => {
 	}
 }
 
-export const storePost = async (title, text, author, upvotes, date, comments) => {
+export const storePost = async (title, text, author, upvotes, date) => {
 	try {
 		await setDoc(doc(db, 'posts', title), {
 			text: text,
 			author: author,
 			upvotes: upvotes,
 			date: date,
-			comments: comments,
 		})
 	} catch (error) {
 		console.error(error)
 	}
 }
 
-export const storeImgPost = async (title, imgUrl, author, upvotes, date, comments) => {
+export const storeImgPost = async (title, imgUrl, author, upvotes, date) => {
 	try {
 		await setDoc(doc(db, 'posts', title), {
 			imgUrl: imgUrl,
 			author: author,
 			upvotes: upvotes,
 			date: date,
-			comments: comments
 		})
 	} catch (error) {
 		console.error(error)
 	}
 }
 
-export const storeLinkPost = async (title, url, author, upvotes, date, comments) => {
+export const storeLinkPost = async (title, url, author, upvotes, date) => {
 	try {
 		await setDoc(doc(db, 'posts', title), {
 			url: url,
 			author: author,
 			upvotes: upvotes,
 			date: date,
-			comments: comments,
 		})
 	} catch (error) {
 		console.error(error)
@@ -108,23 +106,23 @@ export const getPost = async () => {
 	return querySnapshot
 }
 
-export const storePostComment = async (postTitle, comment) => {
-	const post = await getPost()
-	post.forEach((currDoc) => {
-		if (currDoc.id === postTitle) {
-			const postRef = doc(db, 'posts', postTitle)
-			try {
-				setDoc(
-					postRef,
-						{ comments: [...currDoc.data().comments, comment] },
-						{ merge: true }
-				)
-			} catch (error) {
-				console.error(error)
-			}
-		}
-	})
-		
+export const getComments = async () => {
+	const querySnapshot = await getDocs(collection(db, 'comments'))
+	return querySnapshot
+}
+
+export const storePostComment = async (postTitle, author, text, date, upvotes) => {
+	try {
+		await setDoc(doc(db, 'comments', uuidv4()), {
+			post: postTitle,
+			author: author,
+			text: text,
+			date: date,
+			upvotes: upvotes,
+		})
+	} catch (error) {
+		console.error(error)
+	}
 }
 
 export const incrementDbVote = async (e) => {
@@ -153,6 +151,41 @@ export const decrementDbVote = async (e) => {
 			) 
 		}
 	}) 
+}
+
+export const incrementDbCommentVote = async (postTitle, date) => {
+	const comment = await getComments()
+	comment.forEach((currDoc) => {
+		if (
+			currDoc.data().post === postTitle &&
+			currDoc.data().date.toDate().toLocaleString() === date.toLocaleString()
+		) {
+			const commentRef = doc(db, 'comments', currDoc.id)
+			setDoc(
+				commentRef,
+				{ upvotes: currDoc.data().upvotes + 1 },
+				{ merge: true }
+			)
+		}
+	})
+}
+
+export const decrementDbCommentVote = async (postTitle, date) => {
+	const comment = await getComments()
+	comment.forEach((currDoc) => {
+		if (
+			currDoc.data().post === postTitle &&
+			currDoc.data().date.toDate().toLocaleString() ===
+				date.toLocaleString()
+		) {
+			const commentRef = doc(db, 'comments', currDoc.id)
+			setDoc(
+				commentRef,
+				{ upvotes: currDoc.data().upvotes - 1 },
+				{ merge: true }
+			)
+		}
+	})
 }
 
 export const logOutUser = async () => {
