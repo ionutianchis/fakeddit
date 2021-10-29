@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/fakeddit/static/css/main.17c1f176.chunk.css",
+    "main.js": "/fakeddit/static/js/main.ff4a451a.chunk.js",
+    "main.js.map": "/fakeddit/static/js/main.ff4a451a.chunk.js.map",
+    "runtime-main.js": "/fakeddit/static/js/runtime-main.33328eb1.js",
+    "runtime-main.js.map": "/fakeddit/static/js/runtime-main.33328eb1.js.map",
+    "static/js/2.6d95b6dd.chunk.js": "/fakeddit/static/js/2.6d95b6dd.chunk.js",
+    "static/js/2.6d95b6dd.chunk.js.map": "/fakeddit/static/js/2.6d95b6dd.chunk.js.map",
+    "index.html": "/fakeddit/index.html",
+    "static/css/main.17c1f176.chunk.css.map": "/fakeddit/static/css/main.17c1f176.chunk.css.map",
+    "static/js/2.6d95b6dd.chunk.js.LICENSE.txt": "/fakeddit/static/js/2.6d95b6dd.chunk.js.LICENSE.txt",
+    "static/media/AuthModal.css": "/fakeddit/static/media/x.9d7adb1c.webp",
+    "static/media/award.webp": "/fakeddit/static/media/award.985cc2c0.webp",
+    "static/media/comments.webp": "/fakeddit/static/media/comments.1a711e61.webp",
+    "static/media/App.css": "/fakeddit/static/media/verdana.5b0da4fe.ttf",
+    "static/media/new.png": "/fakeddit/static/media/new.c058b6e2.png",
+    "static/media/reply.webp": "/fakeddit/static/media/reply.c7d5ba57.webp",
+    "static/media/share.webp": "/fakeddit/static/media/share.e3100031.webp"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.33328eb1.js",
+    "static/js/2.6d95b6dd.chunk.js",
+    "static/css/main.17c1f176.chunk.css",
+    "static/js/main.ff4a451a.chunk.js"
+  ]
+}
