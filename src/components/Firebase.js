@@ -12,6 +12,7 @@ import {
 	signInWithEmailAndPassword,
 	signOut
 } from 'firebase/auth'
+
 import { v4 as uuidv4 } from 'uuid'
 
 const firebaseApp = initializeApp({
@@ -31,7 +32,7 @@ const storeUserName = async (email, name) => {
 	try {
 		await setDoc(doc(db, 'users', name), {
 			email: email,
-			name: name
+			name: name,
 		})
 	} catch (error) {
 		
@@ -99,7 +100,6 @@ export const storeLinkPost = async (title, url, author, upvotes, date) => {
 		console.error(error)
 	}
 }
-
 
 export const getPost = async () => {
 	const querySnapshot = await getDocs(collection(db, 'posts'))

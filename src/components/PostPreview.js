@@ -20,11 +20,12 @@ const PostPreview = ({
 	index,
 	isLoggedIn,
 	comments,
+	loggedInUser,
 }) => {
 
 	const history = useHistory()
 
-	const currPostComments = comments.filter(x => x.post === title)
+	const currPostComments = comments.filter((x) => x.post === title)
 
 	const [upvoteDisable, setUpvoteDisable] = useState(false)
 	const [downvoteDisable, setDownvoteDisable] = useState(false)
@@ -43,11 +44,43 @@ const PostPreview = ({
 		}
 	}
 
+	const storeToLocal = (e, vote) => { 
+		let userHistory = JSON.parse(localStorage.getItem(loggedInUser)) || []
+		const obj = userHistory.find((x) => x.name === title)
+		if (vote === 'upvote') {
+			if (obj) {
+				obj.upvote = true
+				obj.downvote = false
+				localStorage.setItem(loggedInUser, JSON.stringify(userHistory))
+			} else {
+				userHistory.push({
+					name : e.target.name,
+					upvote: true,
+					downvote: false,
+				})
+				localStorage.setItem(loggedInUser, JSON.stringify(userHistory))
+			}
+		} else if (vote === 'downvote') {
+			if (obj) {
+				obj.downvote = true
+				obj.upvote = false
+				localStorage.setItem(loggedInUser, JSON.stringify(userHistory))
+
+			} else {
+				userHistory.push({
+					name: e.target.name,
+					downvote: true,
+					upvote: false,
+				})
+				localStorage.setItem(loggedInUser, JSON.stringify(userHistory))
+			}
+		}
+	}
+
 	const handleClick = (e) => {
 		if (isLoggedIn === true) {
 			if (e.target.classList.contains('arrow-button-up')) {
-				localStorage.setItem(e.target.name + ' upvote', true)
-				localStorage.setItem(e.target.name + ' downvote', false)
+				storeToLocal(e, 'upvote')
 				e.target.classList.add('arrow-button-up-active')
 				e.target.nextSibling.nextSibling.classList.remove(
 					'arrow-button-down-active'
@@ -55,8 +88,7 @@ const PostPreview = ({
 				incrementDbVote(e)
 				incrementLocalVote(e)
 			} else if (e.target.classList.contains('arrow-button-down')) {
-				localStorage.setItem(e.target.name + ' downvote',true)
-				localStorage.setItem(e.target.name + ' upvote', false)
+				storeToLocal(e, 'downvote')
 				e.target.classList.add('arrow-button-down-active')
 				e.target.previousSibling.previousSibling.classList.remove(
 					'arrow-button-up-active'
@@ -66,45 +98,43 @@ const PostPreview = ({
 			}
 		}
 	}
-	
+
 	useEffect(() => {
 		setUpvoteDisable(!isLoggedIn)
-		setDownvoteDisable(!isLoggedIn)			// change vote ability after login
+		setDownvoteDisable(!isLoggedIn) // change vote ability after login
 	}, [isLoggedIn])
 
 	useEffect(() => {
-		setUpvoteDisable(
-			JSON.parse(
-				localStorage.getItem(
-					title + ' upvote'
-				)
-			)
-		)
-		setDownvoteDisable(
-			JSON.parse(
-				localStorage.getItem(
-					title + ' downvote'
-				)
-			)
-		)
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [upvotes])
-	
+		const userHistory = JSON.parse(localStorage.getItem(loggedInUser)) || []
+		
+		const obj = (userHistory.find(x => x.name === title))
+
+		if (Object.keys(localStorage).includes(loggedInUser)) {
+			if (obj) {
+				setUpvoteDisable(obj.upvote)
+				setDownvoteDisable(obj.downvote) 
+			}
+		} else {
+			setUpvoteDisable(false)
+			setDownvoteDisable(false)
+		}
+	}, [loggedInUser, title, upvotes])
+
 	const getFirstPart = (str) => {
 		const sliceStr = str.slice(8)
 		return sliceStr.split('/')[0]
 	}
-	
+
 	const dispatch = useDispatch()
-	
+
 	const handlePostOpen = () => {
 		history.push(`/fakeddit/${index}`)
-		dispatch(setIndex(index))		
+		dispatch(setIndex(index))
 	}
 
-    let upvoteButtonClass = upvoteDisable ? 'arrow-button-up-active' : ''
-    let downvoteButtonClass = downvoteDisable ? 'arrow-button-down-active' : ''
-	
+	let upvoteButtonClass = upvoteDisable ? 'arrow-button-up-active' : ''
+	let downvoteButtonClass = downvoteDisable ? 'arrow-button-down-active' : ''
+
 	return (
 		<div className='post-container'>
 			<div className='arrow-buttons-div-container'>

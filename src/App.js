@@ -80,11 +80,12 @@ const App = () => {
 	}
 
 	useEffect(() => {
+		// rendering posts and comments stored in firebase
 		getDbPost()
 		getDbComments()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
-	
+
 	return (
 		<div className='container'>
 			<BrowserRouter basename='/'>
@@ -105,6 +106,7 @@ const App = () => {
 								storedPosts={storedPosts}
 								setStoredPosts={setStoredPosts}
 								comments={comments}
+								loggedInUser={loggedInUser}
 							/>
 						)}
 					/>
@@ -117,6 +119,7 @@ const App = () => {
 								storedPosts={storedPosts}
 								setStoredPosts={setStoredPosts}
 								comments={comments}
+								loggedInUser={loggedInUser}
 							/>
 						)}
 					/>
@@ -130,6 +133,7 @@ const App = () => {
 								storedPosts={storedPosts}
 								setStoredPosts={setStoredPosts}
 								comments={comments}
+								loggedInUser={loggedInUser}
 							/>
 						)}
 					/>

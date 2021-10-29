@@ -15,10 +15,15 @@ const FullPost = ({
 	setComments,
 	loggedUser,
 }) => {
+
+	
 	const { post } = useSelector((state) => state.post)
 	const currPost = storedPosts[post]
-
+	
 	const currPostComments = comments.filter((x) => x.post === currPost.title)
+	
+	const sortedComms = currPostComments.sort((a, b) => b.date - a.date)
+	
 	const [upvoteDisable, setUpvoteDisable] = useState(false)
 
 	const [downvoteDisable, setDownvoteDisable] = useState(false)
@@ -44,25 +49,57 @@ const FullPost = ({
 		setStoredPosts([...storedPosts])
 	}
 
+	const storeToLocal = (e, vote) => {
+		let userHistory = JSON.parse(localStorage.getItem(loggedUser)) || []
+		const obj = userHistory.find((x) => x.name === currPost.title)
+		if (vote === 'upvote') {
+			if (obj) {
+				obj.upvote = true
+				obj.downvote = false
+				localStorage.setItem(loggedUser, JSON.stringify(userHistory))
+			} else {
+				userHistory.push({
+					name: e.target.name,
+					upvote: true,
+					downvote: false,
+				})
+				localStorage.setItem(loggedUser, JSON.stringify(userHistory))
+			}
+		} else if (vote === 'downvote') {
+			if (obj) {
+				obj.downvote = true
+				obj.upvote = false
+				localStorage.setItem(loggedUser, JSON.stringify(userHistory))
+			} else {
+				userHistory.push({
+					name: e.target.name,
+					downvote: true,
+					upvote: false,
+				})
+				localStorage.setItem(loggedUser, JSON.stringify(userHistory))
+			}
+		}
+	}
+
 	const handleClick = (e) => {
-		if (e.target.classList.contains('arrow-button-up')) {
-			localStorage.setItem(e.target.name + ' upvote', true)
-			localStorage.setItem(e.target.name + ' downvote', false)
-			e.target.classList.add('arrow-button-up-active')
-			e.target.nextSibling.nextSibling.classList.remove(
-				'arrow-button-down-active'
-			)
-			incrementDbVote(e)
-			incrementLocalVote(e)
-		} else if (e.target.classList.contains('arrow-button-down')) {
-			localStorage.setItem(e.target.name + ' downvote', true)
-			localStorage.setItem(e.target.name + ' upvote', false)
-			e.target.classList.add('arrow-button-down-active')
-			e.target.previousSibling.previousSibling.classList.remove(
-				'arrow-button-up-active'
-			)
-			decrementDbVote(e)
-			decrementLocalVote()
+		if (isLoggedIn === true) {
+			if (e.target.classList.contains('arrow-button-up')) {
+				storeToLocal(e, 'upvote')
+				e.target.classList.add('arrow-button-up-active')
+				e.target.nextSibling.nextSibling.classList.remove(
+					'arrow-button-down-active'
+				)
+				incrementDbVote(e)
+				incrementLocalVote(e)
+			} else if (e.target.classList.contains('arrow-button-down')) {
+				storeToLocal(e, 'downvote')
+				e.target.classList.add('arrow-button-down-active')
+				e.target.previousSibling.previousSibling.classList.remove(
+					'arrow-button-up-active'
+				)
+				decrementDbVote(e)
+				decrementLocalVote()
+			}
 		}
 	}
 
@@ -109,16 +146,20 @@ const FullPost = ({
 	}, [commentContent])
 
 	useEffect(() => {
-		if (isLoggedIn === true && currPost) {
-			setUpvoteDisable(
-				JSON.parse(localStorage.getItem(currPost.title + ' upvote'))
-			)
-			setDownvoteDisable(
-				JSON.parse(localStorage.getItem(currPost.title + ' downvote'))
-			)
+		const userHistory = JSON.parse(localStorage.getItem(loggedUser)) || []
+
+		const obj = userHistory.find((x) => x.name === currPost.title)
+
+		if (Object.keys(localStorage).includes(loggedUser)) {
+			if (obj) {
+				setUpvoteDisable(obj.upvote)
+				setDownvoteDisable(obj.downvote)
+			}
+		} else {
+			setUpvoteDisable(false)
+			setDownvoteDisable(false)
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [currPost])
+	}, [loggedUser, currPost.title, currPost.upvotes])
 
 	let upvoteButtonClass = upvoteDisable ? 'arrow-button-up-active' : ''
 	let downvoteButtonClass = downvoteDisable ? 'arrow-button-down-active' : ''
@@ -205,7 +246,7 @@ const FullPost = ({
 								</div>
 							)}
 
-							<span>Comment as {currPost.author}</span>
+							<span>Comment as {loggedUser}</span>
 
 							<div className='fullpost-input-container'>
 								<textarea
@@ -259,7 +300,7 @@ const FullPost = ({
 							</div>
 						</div>
 					</div>
-					{currPostComments.map((item, index) => {
+					{sortedComms.map((item, index) => {
 						return (
 							<PostComment
 								key={index}
@@ -272,6 +313,8 @@ const FullPost = ({
 								date={item.date}
 								upvotes={item.upvotes}
 								isLoggedIn={isLoggedIn}
+								loggedUser={loggedUser}
+								comments={comments}
 							/>
 						)
 					})}

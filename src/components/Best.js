@@ -10,8 +10,8 @@ const Best = ({
 	storedPosts,
 	setStoredPosts,
 	comments,
+	loggedInUser,
 }) => {
-
 	return (
 		<div className='middle-container'>
 			<div className='best-container'>
@@ -34,6 +34,7 @@ const Best = ({
 							imgUrl={item.imgUrl}
 							url={item.url}
 							comments={comments}
+							loggedInUser={loggedInUser}
 						/>
 					)
 				})}
