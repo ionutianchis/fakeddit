@@ -10,7 +10,6 @@ const PostComment = ({
 	date,
 	index,
 	postTitle,
-	currPostComments,
 	setComments,
 	isLoggedIn,
 	loggedUser,
@@ -21,10 +20,13 @@ const PostComment = ({
 	const [downvoteDisable, setDownvoteDisable] = useState(false)
 
 	const incrementLocalVote = () => {
+		// finding the comment in comments array
 		const incrementComment = comments.find(
 			(x) => x.post === postTitle && x.text === text && x.date === date
 		)
+		// incremeting said comment
 		incrementComment.upvotes = incrementComment.upvotes + 1
+		// filtering comments array so no duplicates show up
 		const filteredArr = [
 			...comments.filter(
 				(x) =>

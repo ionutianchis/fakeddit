@@ -1,5 +1,6 @@
 {
   "name": "fakeddit",
+  "homepage": "https://jonthejon10.github.io/fakeddit",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

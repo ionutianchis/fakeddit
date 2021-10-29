@@ -21,11 +21,9 @@ const Submit = ({loggedInUser, isLoggedIn, storedPosts, setStoredPosts}) => {
 	const [urlPost, setUrlPost] = useState(false)
 	
 	const handleChange = (e) => {
-
 		setPostContent({
 			...postContent,
 			[e.target.name]: e.target.value,
-
 		})
 	}
 

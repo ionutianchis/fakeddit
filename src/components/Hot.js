@@ -10,6 +10,7 @@ const Hot = ({
 	setStoredPosts,
 	comments,
 }) => {
+	// sorting posts based on upvotes
 	const hotPosts = storedPosts.sort((a, b) => b.upvotes - a.upvotes)
 
 	return (

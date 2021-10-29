@@ -44,7 +44,8 @@ const PostPreview = ({
 		}
 	}
 
-	const storeToLocal = (e, vote) => { 
+	const storeToLocal = (e, vote) => {
+		// storing user upvotes and upvote visuals in localstorage
 		let userHistory = JSON.parse(localStorage.getItem(loggedInUser)) || []
 		const obj = userHistory.find((x) => x.name === title)
 		if (vote === 'upvote') {
@@ -81,6 +82,7 @@ const PostPreview = ({
 		if (isLoggedIn === true) {
 			if (e.target.classList.contains('arrow-button-up')) {
 				storeToLocal(e, 'upvote')
+				//button visuals
 				e.target.classList.add('arrow-button-up-active')
 				e.target.nextSibling.nextSibling.classList.remove(
 					'arrow-button-down-active'
@@ -100,11 +102,13 @@ const PostPreview = ({
 	}
 
 	useEffect(() => {
+		// change vote ability after login
 		setUpvoteDisable(!isLoggedIn)
-		setDownvoteDisable(!isLoggedIn) // change vote ability after login
+		setDownvoteDisable(!isLoggedIn)
 	}, [isLoggedIn])
 
 	useEffect(() => {
+		// retrieving stored user upvotes and visuals stored in localstorage
 		const userHistory = JSON.parse(localStorage.getItem(loggedInUser)) || []
 		
 		const obj = (userHistory.find(x => x.name === title))
@@ -121,6 +125,7 @@ const PostPreview = ({
 	}, [loggedInUser, title, upvotes])
 
 	const getFirstPart = (str) => {
+		// only showing first part of links in previews
 		const sliceStr = str.slice(8)
 		return sliceStr.split('/')[0]
 	}
@@ -128,10 +133,12 @@ const PostPreview = ({
 	const dispatch = useDispatch()
 
 	const handlePostOpen = () => {
+		// using redux toolkit to store post's index when opening the full post
 		history.push(`/fakeddit/${index}`)
 		dispatch(setIndex(index))
 	}
-
+	
+	// dynamic vote visuals
 	let upvoteButtonClass = upvoteDisable ? 'arrow-button-up-active' : ''
 	let downvoteButtonClass = downvoteDisable ? 'arrow-button-down-active' : ''
 

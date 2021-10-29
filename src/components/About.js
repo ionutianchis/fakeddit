@@ -15,7 +15,11 @@ const About = () => {
 				it's purpose is to replicate a popular website which we all know
 				and love.
 			</p>
-			<p>Cake day</p>
+			<div className='cake-container'>
+				<span>Cake day:{' '}</span>
+				<img src={require('../images/cake.png').default} alt='' />
+				<span>29th of October 2021</span>
+			</div>
 			&nbsp;
 			<div className='git-container'>
 				<p>©Jonthejon10, 2021</p>

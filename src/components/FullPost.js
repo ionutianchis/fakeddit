@@ -16,12 +16,14 @@ const FullPost = ({
 	loggedUser,
 }) => {
 
-	
+	// getting selected post through index from redux
 	const { post } = useSelector((state) => state.post)
+
 	const currPost = storedPosts[post]
 	
 	const currPostComments = comments.filter((x) => x.post === currPost.title)
 	
+	// sorting current post comments by date of posting
 	const sortedComms = currPostComments.sort((a, b) => b.date - a.date)
 	
 	const [upvoteDisable, setUpvoteDisable] = useState(false)
@@ -31,6 +33,7 @@ const FullPost = ({
 	const [input, setInput] = useState('')
 
 	const [commentContent, setCommentContent] = useState({})
+	
 	const [commentEmpty, setCommentEmpty] = useState(true)
 
 	const incrementLocalVote = () => {

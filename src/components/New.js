@@ -4,7 +4,14 @@ import NewPost from './NewPost'
 import PostPreview from './PostPreview'
 import '../styles/New.css'
 
-const New = ({ isLoggedIn, storedPosts, setStoredPosts, comments }) => {
+const New = ({
+	isLoggedIn,
+	storedPosts,
+	setStoredPosts,
+	comments,
+}) => {
+	
+	// sorting posts based on time of posting
 	const NewPosts = storedPosts.sort((a, b) => b.date - a.date)
 
 	return (
