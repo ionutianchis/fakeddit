@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef} from 'react'
 import { useHistory } from 'react-router-dom'
 import AuthModal from './AuthModal'
 import { logOutUser } from './Firebase'
@@ -10,12 +10,33 @@ const Navbar = ({
 	loggedInUser,
 	setLoggedInUser,
 }) => {
+	const ref = useRef()
 
 	const history = useHistory()
 
 	const [modalOpen, setModalOpen] = useState(false)
 	const [signInTime, setSignInTime] = useState(true)
 	const [openDropdown, setOpenDropdown] = useState(false)
+	
+  useEffect(() => {
+		const checkIfClickedOutside = (e) => {
+			// If the menu is open and the clicked target is not within the menu,
+
+			// then close the menu
+
+			if (openDropdown && ref.current && !ref.current.contains(e.target)) {
+				setOpenDropdown(false)
+			}
+		}
+
+		document.addEventListener('mousedown', checkIfClickedOutside)
+
+		return () => {
+			// Cleanup the event listener
+
+			document.removeEventListener('mousedown', checkIfClickedOutside)
+		}
+  }, [openDropdown])
 
 	const handleSignInClick = () => {
 		setModalOpen(!modalOpen)
@@ -84,7 +105,7 @@ const Navbar = ({
 					</div>
 				)}
 
-				<div className='nav-user-buttons'>
+				<div className='nav-user-buttons' ref={ref}>
 					<button
 						type='button'
 						className='nav-user-icon'
